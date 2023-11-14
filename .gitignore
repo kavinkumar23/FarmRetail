@@ -1,0 +1,12 @@
+.dart_tool/
+android/.gradle/
+build/
+windows/flutter/
+linux/flutter/generated_plugin_registrant.cc
+linux/flutter/generated_plugin_registrant.h
+linux/flutter/generated_plugins.cmake
+linux/flutter/ephemeral/.plugin_symlinks/smart_auth
+macos/Flutter/GeneratedPluginRegistrant.swift
+macos/Flutter/ephemeral/flutter_export_environment.sh
+macos/Flutter/ephemeral/Flutter-Generated.xcconfig
+macos/Flutter/GeneratedPluginRegistrant.swift

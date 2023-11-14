@@ -1,7 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:login_system/configurations/AppColors.dart';
 import 'package:login_system/configurations/BigText.dart';
 import 'package:login_system/configurations/SmallText.dart';
 import 'package:login_system/models/Items.dart';
@@ -48,6 +46,14 @@ class _ItemsPageState extends State<ItemsPage> {
                                   .toString()
                                   .toLowerCase()
                                   .contains(searchText.toLowerCase()) ||
+                              e["category"]
+                                  .toString()
+                                  .toLowerCase()
+                                  .contains(searchText.toLowerCase()) ||
+                              e["quantity"]
+                                  .toString()
+                                  .toLowerCase()
+                                  .contains(searchText.toLowerCase()) ||
                               e["description"]
                                   .toString()
                                   .toLowerCase()
@@ -58,44 +64,68 @@ class _ItemsPageState extends State<ItemsPage> {
                               decoration: BoxDecoration(
                                   color: Color.fromARGB(255, 224, 224, 224),
                                   borderRadius: BorderRadius.circular(5)),
-                              child: ListTile(
-                                title: BigText(text: e["title"]),
-                                subtitle: SmallText(text: e["description"]),
-                                trailing: IconButton(
-                                    onPressed: () {
-                                      showDialog(
-                                          context: context,
-                                          builder: (context) => AlertDialog(
-                                                title: BigText(
-                                                    text: "Are you sure ?"),
-                                                content: SmallText(
-                                                    text:
-                                                        "Click Confirm if you want to delete this item"),
-                                                actions: [
-                                                  TextButton(
-                                                      onPressed: () {
-                                                        Navigator.pop(context);
-                                                      },
-                                                      child: SmallText(
-                                                          text: "Cancel")),
-                                                  TextButton(
-                                                      onPressed: () async {
-                                                        await deleteItem(
-                                                            e["Id"]);
-                                                        Navigator.pop(context);
-                                                      },
-                                                      child: SmallText(
-                                                        text: "Delete",
-                                                        color: Colors.red,
-                                                      ))
-                                                ],
-                                              ));
-                                      // showDialog(context: , builder: builder)
-                                    },
-                                    icon: Icon(
-                                      Icons.delete,
-                                      color: Colors.red,
-                                    )),
+                              child: Expanded(
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    ListTile(
+                                      leading: CircleAvatar(
+                                          radius: 48,
+                                          backgroundColor: Colors.white,
+                                          backgroundImage: NetworkImage(e["image"])),
+                                      title: BigText(text: e["title"]),
+                                      subtitle: SmallText(text: e["description"]),
+                                      trailing: IconButton(
+                                          onPressed: () {
+                                            showDialog(
+                                                context: context,
+                                                builder: (context) => AlertDialog(
+                                                      title: BigText(
+                                                          text: "Are you sure ?"),
+                                                      content: SmallText(
+                                                          text:
+                                                              "Click Confirm if you want to delete this item"),
+                                                      actions: [
+                                                        TextButton(
+                                                            onPressed: () {
+                                                              Navigator.pop(
+                                                                  context);
+                                                            },
+                                                            child: SmallText(
+                                                                text: "Cancel")),
+                                                        TextButton(
+                                                            onPressed: () async {
+                                                              await deleteItem(
+                                                                  e["Id"]);
+                                                              Navigator.pop(
+                                                                  context);
+                                                            },
+                                                            child: SmallText(
+                                                              text: "Delete",
+                                                              color: Colors.red,
+                                                            ))
+                                                      ],
+                                                    ));
+                                            // showDialog(context: , builder: builder)
+                                          },
+                                          icon: Icon(
+                                            Icons.delete,
+                                            color: Colors.red,
+                                          )),
+                                    ),
+                                    Row(
+                                      children: [
+                                        TextButton(
+                                            onPressed: () {},
+                                            child: Text(e['category'],)),
+                                        Flexible(
+                                          child: Center(child: Text(e['quantity'],style: TextStyle(
+                                            color: Colors.black
+                                          ),)))
+                                      ],
+                                    )
+                                  ],
+                                ),
                               ),
                             );
                           } else {

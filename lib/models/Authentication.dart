@@ -1,5 +1,4 @@
 import 'dart:io';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:firebase_core/firebase_core.dart' as firebase_core;
@@ -98,7 +97,7 @@ Future<String> uploadProfilePicture(
     await ref.putFile(File(FilePath));
     String imageUrl = await ref.getDownloadURL();
     print("Image URL : " + imageUrl);
-    // await FirebaseAuth.instance.currentUser!.updatePhotoURL(imageUrl);
+    await FirebaseAuth.instance.currentUser!.updatePhotoURL(imageUrl);
     return imageUrl;
   } on firebase_core.FirebaseException catch (e) {
     print(e);

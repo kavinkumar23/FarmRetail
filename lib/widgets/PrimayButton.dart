@@ -9,7 +9,7 @@ class PrimaryButton extends StatelessWidget {
   final Function TapAction;
   final String text;
   final Color color;
-  final IconData icon;
+  final IconData? icon;
   final double ButtonRadius;
   final double marginValue;
   double padding;
@@ -19,7 +19,7 @@ class PrimaryButton extends StatelessWidget {
       required this.TapAction,
       required this.text,
       required this.color,
-      required this.icon,
+       this.icon,
       this.ButtonRadius = 10,
       this.marginValue = 15,
       this.padding = 15});
