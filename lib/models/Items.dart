@@ -12,17 +12,26 @@ class Items {
   final String Id;
   final String title;
   final String description;
+  final String category;
+  final String quantity;
+  final String image;
 
   const Items({
+    required this.category,
+    required this.quantity,
     required this.Id,
     required this.description,
     required this.title,
+    required this.image,
   });
 
   Map<String, dynamic> toJson() => {
         'Id': Id,
         'description': description,
         'title': title,
+        'category': category,
+        'quantity': quantity,
+        'image': image,
       };
 
   factory Items.fromSnapshot(DocumentSnapshot<Map<String, dynamic>> document) {
@@ -31,11 +40,17 @@ class Items {
       Id: data["Id"],
       description: data["description"],
       title: data["title"],
+      category: data["category"],
+      quantity: data["quantity"],
+      image: data["image"],
     );
   }
 }
 
-Future AddNewItem(String Itemtitle, String ItemDescription) async {
+Future AddNewItem(String Itemtitle, String ItemDescription, String itemCategory,
+    String itemQuantity,
+    String itemimage
+    ) async {
   //Add Product
 
   final PostRequest = await FirebaseFirestore.instance
@@ -44,15 +59,17 @@ Future AddNewItem(String Itemtitle, String ItemDescription) async {
       .collection("items")
       .doc();
 
-  // Upload Image
-  // String imageUploaded = "";
-  // await uploadProductImage(PostRequest.id, ImageFileadress)
-  //     .then((value) => imageUploaded = value);
+  // UploadImage
+  String imageUploaded = "";
+  await uploadProductImage(PostRequest.id, itemimage)
+      .then((value) => imageUploaded = value);
 
   final NewItem = Items(
     Id: PostRequest.id,
     title: Itemtitle,
     description: ItemDescription,
+    category: itemCategory,
+    quantity: itemQuantity, image: itemimage,
   );
 
   final json = NewItem.toJson();
@@ -103,22 +120,22 @@ Future EditProduct(String PId, String thisisimage, String Ptitle,
   });
 }
 
-// Future<String> uploadProductImage(
-//   String FileName,
-//   String FilePath,
-// ) async {
-//   File file = File(FilePath);
-//   try {
-//     FirebaseStorage storage = FirebaseStorage.instance;
-//     Reference ref = storage
-//         .ref('${FirebaseAuth.instance.currentUser!.email}/profile/')
-//         .child(FileName);
-//     await ref.putFile(File(FilePath));
-//     String imageUrl = await ref.getDownloadURL();
-//     return imageUrl;
-//   } on firebase_core.FirebaseException catch (e) {
-//     print(e);
-//   }
+Future<String> uploadProductImage(
+  String FileName,
+  String FilePath,
+) async {
+  File file = File(FilePath);
+  try {
+    FirebaseStorage storage = FirebaseStorage.instance;
+    Reference ref = storage
+        .ref('${FirebaseAuth.instance.currentUser!.email}/profile/')
+        .child(FileName);
+    await ref.putFile(File(FilePath));
+    String imageUrl = await ref.getDownloadURL();
+    return imageUrl;
+  } on firebase_core.FirebaseException catch (e) {
+    print(e);
+  }
 
-//   return '';
-// }
+  return '';
+}

@@ -50,6 +50,7 @@ class _SignupState extends State<Signup> {
 
   @override
   initState() {
+    super.initState();
     print(_CurrentAddress);
   }
 

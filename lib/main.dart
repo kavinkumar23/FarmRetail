@@ -1,12 +1,10 @@
-import 'package:animated_splash_screen/animated_splash_screen.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:login_system/MainPage.dart';
-import 'package:login_system/admin/Login.dart';
 import 'package:login_system/admin/Signup.dart';
-import 'package:login_system/configurations/SmallText.dart';
+import 'package:login_system/admin/phone_otp_screen.dart';
 
 Future main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -36,10 +34,9 @@ class _MyAppState extends State<MyApp> {
     }
   }
 
-  // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
+    return GetMaterialApp(
         debugShowCheckedModeBanner: false,
         home: Scaffold(
             body: FirebaseAuth.instance.currentUser == null ||
