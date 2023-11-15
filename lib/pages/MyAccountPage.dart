@@ -1,18 +1,16 @@
 import 'dart:io';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_launcher_icons/xml_templates.dart';
 import 'package:get/get.dart';
+import 'package:get_storage/get_storage.dart';
 import 'package:login_system/configurations/AppColors.dart';
 import 'package:login_system/configurations/BigText.dart';
 import 'package:login_system/configurations/SmallText.dart';
-import 'package:login_system/models/Authentication.dart';
-import 'package:login_system/models/UserClass.dart';
-
+import '../controllers/auth_controller.dart';
+import '../controllers/user_controller.dart';
 import '../widgets/settingtile_widget.dart';
 
 class MyAccountPage extends StatefulWidget {
@@ -26,11 +24,14 @@ class _MyAccountPageState extends State<MyAccountPage> {
   String imageaddress = "";
   String imagetoUpload = "";
   bool darkMode = false;
+  final box = GetStorage();
+  final AuthController authController = Get.put(AuthController());
+  final UserController userController = Get.put(UserController());
 
   @override
   Widget build(BuildContext context) {
     return StreamBuilder(
-        stream: AllUsers(),
+        stream: userController.allUsers(),
         builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
           if (snapshot.hasData) {
             if (snapshot.data!.docs.isNotEmpty) {
@@ -75,11 +76,9 @@ class _MyAccountPageState extends State<MyAccountPage> {
                                           imagetoUpload = filePath;
                                         });
 
-                                        String ImageURL =
-                                            await uploadProfilePicture(
-                                                imageaddress,
-                                                fileName,
-                                                filePath);
+                                        String ImageURL = await authController
+                                            .uploadProfilePicture(imageaddress,
+                                                fileName, filePath);
 
                                         setState(() {
                                           imageaddress =
@@ -101,16 +100,16 @@ class _MyAccountPageState extends State<MyAccountPage> {
                                                   fit: BoxFit.cover)
                                               : DecorationImage(
                                                   image: NetworkImage(
-                                                      "widget.image"),
+                                                      e['ProfileImage']),
                                                   fit: BoxFit.cover),
                                           color: const Color.fromARGB(
                                               255, 231, 231, 231)),
-                                      child: Center(
-                                          child: imageaddress == ""
-                                              ? const Icon(
-                                                  Icons.add_a_photo,
-                                                )
-                                              : const SizedBox()),
+                                      // child: Center(
+                                      //     child: imageaddress == ""
+                                      //         ? const Icon(
+                                      //             Icons.add_a_photo,
+                                      //           )
+                                      //         : const SizedBox()),
                                     ),
                                   ),
                                   const SizedBox(
@@ -154,19 +153,22 @@ class _MyAccountPageState extends State<MyAccountPage> {
                                         value: darkMode,
                                         onChanged: (bool value) async {
                                           // await box.write('darkMode', value);
-                                          Get.changeThemeMode(value
-                                              ? ThemeMode.dark
-                                              : ThemeMode.light);
-                                          setState(() {
-                                            darkMode = value;
-                                          });
+                                          // Get.changeThemeMode(value
+                                          //     ? ThemeMode.dark
+                                          //     : ThemeMode.light);
+                                          // setState(() {
+                                          //   darkMode = value;
+                                          // });
                                         }),
                                   ),
                                   SettingTileWidget(
                                     text: 'Change userName',
                                     iconPath: Icons.key,
                                     trailingWidget: IconButton(
-                                        onPressed: () {},
+                                        onPressed: () {
+                                          userController.changeName(
+                                              context, e["username"]);
+                                        },
                                         icon: Icon(
                                             Icons.arrow_forward_ios_outlined)),
                                   ),

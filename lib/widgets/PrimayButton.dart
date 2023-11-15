@@ -6,7 +6,7 @@ import 'package:login_system/configurations/Dimensions.dart';
 import 'package:login_system/configurations/SmallText.dart';
 
 class PrimaryButton extends StatelessWidget {
-  final Function TapAction;
+  final VoidCallback tapAction;
   final String text;
   final Color color;
   final IconData? icon;
@@ -16,7 +16,7 @@ class PrimaryButton extends StatelessWidget {
 
   PrimaryButton(
       {super.key,
-      required this.TapAction,
+      required this.tapAction,
       required this.text,
       required this.color,
        this.icon,
@@ -27,7 +27,7 @@ class PrimaryButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: () => TapAction(),
+      onTap: tapAction,
       child: Container(
         width: double.maxFinite,
         //    height:double.nan,

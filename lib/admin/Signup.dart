@@ -5,19 +5,22 @@ import 'dart:ffi';
 
 import 'package:flutter/material.dart';
 import 'package:file_picker/file_picker.dart';
+import 'package:get/get.dart';
 import 'package:login_system/admin/LocationFunctions.dart';
 import 'package:login_system/admin/Login.dart';
 import 'package:login_system/configurations/AppColors.dart';
 import 'package:login_system/configurations/BigText.dart';
 import 'package:login_system/configurations/Dimensions.dart';
 import 'package:login_system/configurations/SmallText.dart';
-import 'package:login_system/models/Authentication.dart';
+import 'package:login_system/controllers/user_controller.dart';
 import 'package:login_system/models/UserClass.dart';
 import 'package:login_system/widgets/Loading.dart';
 import 'package:login_system/widgets/PlaneTextField.dart';
 import 'package:login_system/widgets/PrimayButton.dart';
 import 'package:quickalert/models/quickalert_type.dart';
 import 'package:quickalert/widgets/quickalert_dialog.dart';
+
+import '../controllers/auth_controller.dart';
 
 class Signup extends StatefulWidget {
   bool isLoading = false;
@@ -38,6 +41,8 @@ class _SignupState extends State<Signup> {
   TextEditingController _emailController = TextEditingController();
   TextEditingController _passwordController = TextEditingController();
   TextEditingController _addressController = TextEditingController();
+  final AuthController authController = Get.put(AuthController());
+  final UserController userController = Get.put(UserController());
 
   String thisiserror = "";
   String LoadingMessage = "Registring User";
@@ -351,7 +356,7 @@ class _SignupState extends State<Signup> {
                       ),
                       PrimaryButton(
                           icon: Icons.account_circle,
-                          TapAction: () async {
+                          tapAction: () async {
                             setState(() {
                               widget.isLoading = true;
                             });
@@ -410,10 +415,9 @@ class _SignupState extends State<Signup> {
                                 });
 
                                 String imageUploaded = "";
-                                await uploadProfilePicture(
-                                        _emailController.text,
-                                        _emailController.text,
-                                        imagetoUpload)
+                                await authController
+                                    .uploadProfilePicture(_emailController.text,
+                                        _emailController.text, imagetoUpload)
                                     .then((value) => imageUploaded = value);
                               }
 
@@ -422,15 +426,16 @@ class _SignupState extends State<Signup> {
                                     "Creating your account on firebase";
                               });
 
-                              bool shouldNavigate = await register(
-                                  _emailController.text,
-                                  _passwordController.text);
+                              bool shouldNavigate =
+                                  await authController.register(
+                                      _emailController.text,
+                                      _passwordController.text);
 
                               if (shouldNavigate) {
                                 setState(() {
                                   LoadingMessage = "Saving all Details";
                                 });
-                                await RegisterNewUser(
+                                await userController.registerNewUser(
                                     imageUploaded,
                                     _nameController.text,
                                     _phoneController.text,
@@ -468,10 +473,17 @@ class _SignupState extends State<Signup> {
                                 });
 
                                 print("this is first > " + thisiserror);
-                                thisiserror = message.toString().replaceRange(
-                                    message.toString().indexOf("["),
-                                    message.toString().indexOf("]") + 2,
-                                    "");
+                                thisiserror = authController.message
+                                    .toString()
+                                    .replaceRange(
+                                        authController.message
+                                            .toString()
+                                            .indexOf("["),
+                                        authController.message
+                                                .toString()
+                                                .indexOf("]") +
+                                            2,
+                                        "");
                                 print("this is after > " + thisiserror);
                               }
                             }

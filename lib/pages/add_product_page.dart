@@ -1,13 +1,13 @@
 import 'dart:io';
 import 'package:file_picker/file_picker.dart';
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-
+import 'package:get/get.dart';
+import '../admin/LocationFunctions.dart';
 import '../configurations/AppColors.dart';
 import '../configurations/BigText.dart';
-import '../models/Items.dart';
+import '../configurations/SmallText.dart';
+import '../controllers/item_controller.dart';
 import '../widgets/PlaneTextField.dart';
 import '../widgets/PrimayButton.dart';
 
@@ -19,9 +19,18 @@ class AddProductPage extends StatefulWidget {
 }
 
 class _AddProductPageState extends State<AddProductPage> {
+  final ItemsController itemsController = Get.find<ItemsController>();
+
   String imageaddress = "";
+  String _CurrentAddress = "N/A";
   String imagetoUpload = "";
+  TextEditingController _addressController = TextEditingController();
   bool isAdding = false;
+  bool _addressEmpty = false;
+  bool isLoading = false;
+
+  String thisiserror = "";
+  String LoadingMessage = "Registring User";
   TextEditingController titleController = TextEditingController();
   TextEditingController descController = TextEditingController();
   TextEditingController categoryController = TextEditingController();
@@ -30,167 +39,218 @@ class _AddProductPageState extends State<AddProductPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          showModalBottomSheet(
-              context: context,
-              builder: (BuildContext context) => Container(
-                    padding: EdgeInsets.all(20),
-                    color: Colors.white,
-                    child: SingleChildScrollView(
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      body: SingleChildScrollView(
+        child: Column(
+          children: [
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: BigText(
+                      text: "Add New Item",
+                      isCentre: false,
+                    ),
+                  ),
+                  SizedBox(
+                    height: 10,
+                  ),
+                  GestureDetector(
+                    onTap: () async {
+                      final result = await FilePicker.platform.pickFiles(
+                        allowMultiple: false,
+                        type: FileType.custom,
+                        allowedExtensions: ['png', 'jpg'],
+                      );
+
+                      print(result!.files.single.path);
+                      if (result == null) {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                            const SnackBar(content: Text('Error Uploading')));
+                      } else {
+                        final fileName = result.files.single.name;
+                        final filePath = result.files.single.path!;
+                        setState(() {
+                          imagetoUpload = filePath;
+                        });
+
+                        // String ImageURL = await uploadProductImage(
+                        //     fileName, filePath);
+
+                        setState(() {
+                          imageaddress = result.files.single.path!;
+                        });
+                      }
+                    },
+                    child: Container(
+                      margin: EdgeInsets.only(left: 11),
+                      height: 166,
+                      width: 322,
+                      decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(7),
+                          image: imageaddress != ""
+                              ? DecorationImage(
+                                  image: FileImage(
+                                    File(imageaddress),
+                                  ),
+                                  fit: BoxFit.cover)
+                              : DecorationImage(
+                                  image: NetworkImage(imageaddress),
+                                  fit: BoxFit.cover),
+                          color: const Color.fromARGB(255, 231, 231, 231)),
+                      child: Center(
+                          child: imageaddress == ""
+                              ? const Icon(
+                                  Icons.add_a_photo,
+                                )
+                              : const SizedBox()),
+                    ),
+                  ),
+                  SizedBox(
+                    height: 11,
+                  ),
+                  PlaneTextField(
+                      isEnabled: isAdding == true ? false : true,
+                      placeholder: "Enter item title",
+                      controller: titleController,
+                      icon: Icons.title,
+                      onChange: () {}),
+                  PlaneTextField(
+                      isEnabled: isAdding == true ? false : true,
+                      placeholder: "Enter item category",
+                      controller: categoryController,
+                      icon: Icons.title,
+                      onChange: () {}),
+                  PlaneTextField(
+                      isEnabled: isAdding == true ? false : true,
+                      placeholder: "Enter item quantity",
+                      controller: quantitiyController,
+                      icon: Icons.title,
+                      onChange: () {}),
+                  PlaneTextField(
+                      isEnabled: isAdding == true ? false : true,
+                      minLines: 2,
+                      maxLines: 3,
+                      placeholder: "Enter item description",
+                      controller: descController,
+                      icon: Icons.title,
+                      onChange: () {}),
+                  PlaneTextField(
+                    isEmpty: _addressEmpty == false ? false : true,
+                    onChange: (value) => {
+                      setState(() {
+                        thisiserror = "";
+                        _addressEmpty = false;
+                      })
+                    },
+                    icon: Icons.pin_drop,
+                    placeholder: 'Address',
+                    controller: _addressController,
+                  ),
+                  _addressEmpty != false
+                      ? Padding(
+                          padding: const EdgeInsets.only(left: 10.0),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.start,
                             children: [
-                              BigText(
-                                text: "Add New Item",
-                                isCentre: false,
+                              SmallText(
+                                text: " Address field is required",
+                                color: Colors.red,
                               ),
-                              IconButton(
-                                  onPressed: () {
-                                    Navigator.pop(context);
-                                  },
-                                  icon: Icon(Icons.cancel))
                             ],
                           ),
-                          SizedBox(
-                            height: 10,
-                          ),
-                          GestureDetector(
-                            onTap: () async {
-                              final result =
-                                  await FilePicker.platform.pickFiles(
-                                allowMultiple: false,
-                                type: FileType.custom,
-                                allowedExtensions: ['png', 'jpg'],
-                              );
+                        )
+                      : SizedBox(),
+                  InkWell(
+                    onTap: () async {
+                      setState(() {
+                        isLoading = true;
+                        LoadingMessage = "Fetching your current Location";
+                      });
 
-                              print(result!.files.single.path);
-                              if (result == null) {
-                                ScaffoldMessenger.of(context).showSnackBar(
-                                    const SnackBar(
-                                        content: Text('Error Uploading')));
-                              } else {
-                                final fileName = result.files.single.name;
-                                final filePath = result.files.single.path!;
-                                setState(() {
-                                  imagetoUpload = filePath;
-                                });
+                      await FetchCurrentLocation().then((value) {
+                        setState(() {
+                          _CurrentAddress = value;
+                          print(_CurrentAddress);
+                        });
+                        //  print(_CurrentAddress);
+                        _addressController.text = _CurrentAddress;
+                        // _CurrentAddress = value;
+                      });
 
-                                String ImageURL = await uploadProductImage(
-                                    fileName, filePath);
+                      setState(() {
+                        isLoading = false;
+                      });
 
-                                setState(() {
-                                  imageaddress = result.files.single.path!;
-                                });
-                              }
-                            },
-                            child: Container(
-                              margin: EdgeInsets.only(left: 11),
-                              height: 166,
-                              width: 300,
-                              decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(7),
-                                  image: imageaddress != ""
-                                      ? DecorationImage(
-                                          image: FileImage(
-                                            File(imageaddress),
-                                          ),
-                                          fit: BoxFit.cover)
-                                      : DecorationImage(
-                                          image: NetworkImage(imageaddress),
-                                          fit: BoxFit.cover),
-                                  color:
-                                      const Color.fromARGB(255, 231, 231, 231)),
-                              child: Center(
-                                  child: imageaddress == ""
-                                      ? const Icon(
-                                          Icons.add_a_photo,
-                                        )
-                                      : const SizedBox()),
-                            ),
+                      print("Current Location");
+                    },
+                    child: Padding(
+                      padding: const EdgeInsets.all(10),
+                      child: Row(
+                        children: [
+                          Icon(
+                            Icons.location_searching,
+                            color: AppColors.PrimaryColor,
                           ),
                           SizedBox(
-                            height: 11,
+                            width: 5,
                           ),
-                          PlaneTextField(
-                              isEnabled: isAdding == true ? false : true,
-                              placeholder: "Enter item title",
-                              controller: titleController,
-                              icon: Icons.title,
-                              onChange: () {}),
-                          PlaneTextField(
-                              isEnabled: isAdding == true ? false : true,
-                              placeholder: "Enter item category",
-                              controller: categoryController,
-                              icon: Icons.title,
-                              onChange: () {}),
-                          PlaneTextField(
-                              isEnabled: isAdding == true ? false : true,
-                              placeholder: "Enter item quantity",
-                              controller: quantitiyController,
-                              icon: Icons.title,
-                              onChange: () {}),
-                          PlaneTextField(
-                              isEnabled: isAdding == true ? false : true,
-                              minLines: 2,
-                              maxLines: 3,
-                              placeholder: "Enter item description",
-                              controller: descController,
-                              icon: Icons.title,
-                              onChange: () {}),
-                          PrimaryButton(
-                              TapAction: () async {
-                                if (
-                                  imageaddress==""||
-                                  descController.text == "" ||
-                                    quantitiyController.text == "" ||
-                                    categoryController.text == "" ||
-                                    titleController.text == "") {
-                                  Fluttertoast.showToast(
-                                      msg: "Some of Fields are empty");
-                                } else {
-                                  setState(() {
-                                    isAdding = true;
-                                  });
-
-                                  await AddNewItem(
-                                    imageaddress,
-                                    titleController.text,
-                                    categoryController.text,
-                                    quantitiyController.text,
-                                    descController.text,
-                                  );
-
-                                  setState(() {
-                                    isAdding = false;
-                                    imageaddress = "";
-                                    titleController.text = "";
-                                    descController.text = "";
-                                    categoryController.text = "";
-                                    quantitiyController.text = "";
-                                  });
-
-                                  Navigator.pop(context);
-
-                                  Fluttertoast.showToast(
-                                      msg: "New Item Added successfully");
-                                }
-                              },
-                              text: "Add Item",
-                              color: AppColors.PrimaryColor,
-                              icon: Icons.add)
+                          SmallText(
+                            text: "Fetch Current Location",
+                            color: AppColors.PrimaryColor,
+                          )
                         ],
                       ),
                     ),
-                  ));
-        },
-        backgroundColor: AppColors.PrimaryColor,
-        child: Icon(
-          Icons.add,
-          color: Colors.white,
+                  ),
+                  PrimaryButton(
+                      tapAction: () async {
+                        if (imageaddress == "" ||
+                            descController.text == "" ||
+                            quantitiyController.text == "" ||
+                            categoryController.text == "" ||
+                            _addressController.text == "" ||
+                            titleController.text == "") {
+                          Fluttertoast.showToast(
+                              msg: "Some of Fields are empty");
+                        } else {
+                          setState(() {
+                            isAdding = true;
+                          });
+
+                       await   itemsController.addNewItem(
+                              itemtitle: titleController.text.trim(),
+                              ItemDescription: descController.text,
+                              itemCategory: categoryController.text,
+                              itemQuantity: quantitiyController.text,
+                              itemimage: imageaddress,
+                              address: _addressController.text);
+
+                          setState(() {
+                            isAdding = false;
+                            imageaddress = "";
+                            titleController.text = "";
+                            descController.text = "";
+                            categoryController.text = "";
+                            quantitiyController.text = "";
+                            _addressController.text = "";
+                          });
+
+                          // Navigator.pop(context);
+                          Get.back();
+                          Fluttertoast.showToast(
+                              msg: "New Item Added successfully");
+                        }
+                      },
+                      text: "Add Item",
+                      color: AppColors.PrimaryColor,
+                      icon: Icons.add)
+                ],
+              ),
+            ),
+          ],
         ),
       ),
     );
