@@ -1,20 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:get/get.dart';
 import 'package:login_system/MainPage.dart';
 import 'package:login_system/admin/ForgetPassword.dart';
 import 'package:login_system/admin/Signup.dart';
 import 'package:login_system/configurations/BigText.dart';
-import 'package:login_system/models/Authentication.dart';
 import 'package:login_system/widgets/Loading.dart';
 import 'package:login_system/configurations/AppColors.dart';
 import 'package:login_system/models/UserClass.dart';
 import 'package:login_system/widgets/PlaneTextField.dart';
 import 'package:login_system/widgets/PrimayButton.dart';
-import 'package:overlay_loader_with_app_icon/overlay_loader_with_app_icon.dart';
-import 'package:quickalert/models/quickalert_type.dart';
-import 'package:quickalert/widgets/quickalert_dialog.dart';
 import '../../../configurations/Dimensions.dart';
 import '../../../configurations/SmallText.dart';
+import '../controllers/auth_controller.dart';
 
 class Login extends StatefulWidget {
   bool isLoading = false;
@@ -27,11 +25,15 @@ class Login extends StatefulWidget {
 class _LoginState extends State<Login> {
   TextEditingController _emailController = TextEditingController();
   TextEditingController _passwordController = TextEditingController();
+  final AuthController authController = Get.put(AuthController());
+
   String thisiserror = "";
   String LoadingMessage = "Logging in";
 
   @override
-  initState() {}
+  initState() {
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -119,7 +121,7 @@ class _LoginState extends State<Login> {
                       ),
                       PrimaryButton(
                           icon: Icons.login,
-                          TapAction: () async {
+                          tapAction: () async {
                             setState(() {
                               widget.isLoading = true;
                             });
@@ -130,7 +132,7 @@ class _LoginState extends State<Login> {
                                 widget.isLoading = false;
                               });
                             } else {
-                              bool shouldLogin = await signIn(
+                              bool shouldLogin = await authController.signIn(
                                   _emailController.text,
                                   _passwordController.text);
 
@@ -148,10 +150,17 @@ class _LoginState extends State<Login> {
                               } else {
                                 setState(() {
                                   widget.isLoading = false;
-                                  thisiserror = message.toString().replaceRange(
-                                      message.toString().indexOf("["),
-                                      message.toString().indexOf("]") + 2,
-                                      "");
+                                  thisiserror = authController.message
+                                      .toString()
+                                      .replaceRange(
+                                          authController.message
+                                              .toString()
+                                              .indexOf("["),
+                                          authController.message
+                                                  .toString()
+                                                  .indexOf("]") +
+                                              2,
+                                          "");
 
                                   print("this is after > $thisiserror");
                                 });

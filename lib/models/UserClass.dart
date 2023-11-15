@@ -1,7 +1,6 @@
 // ignore_for_file: file_names, non_constant_identifier_names
 
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 
 final _db = FirebaseFirestore.instance;
 
@@ -42,26 +41,4 @@ class UserClass {
       UserId: data["UserId"],
     );
   }
-}
-
-Future RegisterNewUser(String ProfilePicture, String Username, String PhoneNo,
-    String Email, String Adress) async {
-  final Register = FirebaseFirestore.instance
-      .collection('user')
-      .doc(FirebaseAuth.instance.currentUser!.uid);
-
-  final NewUser = UserClass(
-      ProfileImage: ProfilePicture,
-      username: Username,
-      Phoneno: PhoneNo,
-      email: Email,
-      Address: Adress,
-      UserId: FirebaseAuth.instance.currentUser!.uid);
-
-  final json = NewUser.toJson();
-  await Register.set(json);
-}
-
-Stream<QuerySnapshot<Map<String, dynamic>>> AllUsers() {
-  return FirebaseFirestore.instance.collection('user').snapshots();
 }

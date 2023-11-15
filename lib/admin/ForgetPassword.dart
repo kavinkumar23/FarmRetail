@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:get/get.dart';
 import 'package:login_system/admin/Login.dart';
 import 'package:login_system/admin/Signup.dart';
 import 'package:login_system/configurations/AppColors.dart';
 import 'package:login_system/configurations/BigText.dart';
 import 'package:login_system/configurations/Dimensions.dart';
 import 'package:login_system/configurations/SmallText.dart';
+import 'package:login_system/controllers/auth_controller.dart';
 import 'package:login_system/models/Authentication.dart';
 import 'package:login_system/widgets/Loading.dart';
 import 'package:login_system/widgets/PlaneTextField.dart';
@@ -20,6 +22,7 @@ class ForgetPassword extends StatefulWidget {
 }
 
 class _ForgetPasswordState extends State<ForgetPassword> {
+  final AuthController authController = Get.put(AuthController());
   String thisiserror = "";
   TextEditingController _emailController = TextEditingController();
   @override
@@ -109,7 +112,7 @@ class _ForgetPasswordState extends State<ForgetPassword> {
                       ),
                       PrimaryButton(
                           icon: Icons.login,
-                          TapAction: () async {
+                          tapAction: () async {
                             setState(() {
                               widget.isLoading = true;
                             });
@@ -119,8 +122,8 @@ class _ForgetPasswordState extends State<ForgetPassword> {
                                 widget.isLoading = false;
                               });
                             } else {
-                              bool shouldLogin =
-                                  await resetmypassword(_emailController.text);
+                              bool shouldLogin = await authController
+                                  .resetmypassword(_emailController.text);
 
                               if (shouldLogin == true) {
                                 Fluttertoast.showToast(
@@ -139,10 +142,17 @@ class _ForgetPasswordState extends State<ForgetPassword> {
                                         builder: ((context) => Login())));
                               } else {
                                 setState(() {
-                                  thisiserror = message.toString().replaceRange(
-                                      message.toString().indexOf("["),
-                                      message.toString().indexOf("]") + 2,
-                                      "");
+                                  thisiserror = authController.message
+                                      .toString()
+                                      .replaceRange(
+                                          authController.message
+                                              .toString()
+                                              .indexOf("["),
+                                          authController.message
+                                                  .toString()
+                                                  .indexOf("]") +
+                                              2,
+                                          "");
                                   widget.isLoading = false;
 
                                   print("this is after > $thisiserror");

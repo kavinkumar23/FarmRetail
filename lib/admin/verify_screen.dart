@@ -102,7 +102,7 @@ class _MyVerifyState extends State<MyVerify> {
                 height: 20,
               ),
               PrimaryButton(
-                TapAction: () async {
+                tapAction: () async {
                   try {
                     PhoneAuthCredential credential =
                         PhoneAuthProvider.credential(

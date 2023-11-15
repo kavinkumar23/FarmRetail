@@ -149,7 +149,7 @@ class _MyPhoneState extends State<MyPhone> {
                 height: 20,
               ),
               PrimaryButton(
-                  TapAction: () async {
+                  tapAction: () async {
                     try {
                       await FirebaseAuth.instance.verifyPhoneNumber(
                         phoneNumber: countryController.text + phone,

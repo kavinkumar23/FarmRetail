@@ -10,3 +10,7 @@ macos/Flutter/GeneratedPluginRegistrant.swift
 macos/Flutter/ephemeral/flutter_export_environment.sh
 macos/Flutter/ephemeral/Flutter-Generated.xcconfig
 macos/Flutter/GeneratedPluginRegistrant.swift
+android/app/src/main/java/io/flutter/plugins/GeneratedPluginRegistrant.java
+macos/Flutter/
+windows/flutter/generated_plugin_registrant.cc
+windows/flutter/
