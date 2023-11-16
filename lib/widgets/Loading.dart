@@ -1,11 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/src/widgets/framework.dart';
-import 'package:flutter/src/widgets/placeholder.dart';
-import 'package:login_system/configurations/AppColors.dart';
 import 'package:login_system/configurations/SmallText.dart';
-import 'package:overlay_loader_with_app_icon/overlay_loader_with_app_icon.dart';
-import 'dart:math';
-import 'package:flutter/services.dart';
 
 class Loading extends StatefulWidget {
   final String message;
@@ -16,8 +10,8 @@ class Loading extends StatefulWidget {
 }
 
 class _LoadingState extends State<Loading> with SingleTickerProviderStateMixin {
-  late AnimationController _animationController;
-  late Animation<double> _animation;
+  late AnimationController animationController;
+  late Animation<double> animation;
 
   @override
   void initState() {

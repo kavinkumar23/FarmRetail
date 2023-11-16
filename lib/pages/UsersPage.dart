@@ -51,7 +51,7 @@ class _UsersPageState extends State<UsersPage> {
               },
               child: Container(
                 margin: const EdgeInsets.symmetric(vertical: 3.0),
-                constraints: BoxConstraints(minHeight: 100, maxHeight: 500),
+                constraints: BoxConstraints(minHeight: 100, maxHeight: Get.height*.72),
                 child: StreamBuilder(
                     stream: userController.allUsers(),
                     builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {

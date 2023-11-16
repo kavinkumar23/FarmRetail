@@ -58,7 +58,7 @@ class ItemHelper {
     // await desertRef.delete();
   }
 
-  Stream<QuerySnapshot<Map<String, dynamic>>> ItemsofUser() {
+  Stream<QuerySnapshot<Map<String, dynamic>>> itemsofUser() {
     return FirebaseFirestore.instance
         .collection('user')
         .doc(FirebaseAuth.instance.currentUser?.uid)
@@ -69,7 +69,7 @@ class ItemHelper {
 
   ///Edit Product
 
-  Future EditProduct(String PId, String thisisimage, String Ptitle,
+  Future editProduct(String PId, String thisisimage, String Ptitle,
       String PDescription, String PCategory, double PPrice) async {
     await FirebaseFirestore.instance
         .collection('user')

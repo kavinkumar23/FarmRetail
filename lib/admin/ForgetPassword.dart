@@ -8,20 +8,20 @@ import 'package:login_system/configurations/BigText.dart';
 import 'package:login_system/configurations/Dimensions.dart';
 import 'package:login_system/configurations/SmallText.dart';
 import 'package:login_system/controllers/auth_controller.dart';
-import 'package:login_system/models/Authentication.dart';
 import 'package:login_system/widgets/Loading.dart';
 import 'package:login_system/widgets/PlaneTextField.dart';
 import 'package:login_system/widgets/PrimayButton.dart';
 
 class ForgetPassword extends StatefulWidget {
   ForgetPassword({super.key});
-  bool isLoading = false;
 
   @override
   State<ForgetPassword> createState() => _ForgetPasswordState();
 }
 
 class _ForgetPasswordState extends State<ForgetPassword> {
+  bool isLoading = false;
+
   final AuthController authController = Get.put(AuthController());
   String thisiserror = "";
   TextEditingController _emailController = TextEditingController();
@@ -29,7 +29,7 @@ class _ForgetPasswordState extends State<ForgetPassword> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: AppColors.darkBackgroundColor,
-      body: widget.isLoading == true
+      body: isLoading == true
           ? Loading(
               message: "Sending reset link to your email",
             )
@@ -114,12 +114,12 @@ class _ForgetPasswordState extends State<ForgetPassword> {
                           icon: Icons.login,
                           tapAction: () async {
                             setState(() {
-                              widget.isLoading = true;
+                              isLoading = true;
                             });
                             if (_emailController.text.isEmpty) {
                               setState(() {
                                 thisiserror = "Email field is empty";
-                                widget.isLoading = false;
+                                isLoading = false;
                               });
                             } else {
                               bool shouldLogin = await authController
@@ -131,7 +131,7 @@ class _ForgetPasswordState extends State<ForgetPassword> {
                                         "Check your email for Password Reset Link");
 
                                 setState(() {
-                                  widget.isLoading = false;
+                                  isLoading = false;
 
                                   print("this is after > $thisiserror");
                                 });
@@ -153,7 +153,7 @@ class _ForgetPasswordState extends State<ForgetPassword> {
                                                   .indexOf("]") +
                                               2,
                                           "");
-                                  widget.isLoading = false;
+                                  isLoading = false;
 
                                   print("this is after > $thisiserror");
                                 });

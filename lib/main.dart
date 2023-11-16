@@ -3,7 +3,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:login_system/MainPage.dart';
-import 'package:login_system/admin/phone_otp_screen.dart';
+import 'admin/Signup.dart';
 
 Future main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -40,7 +40,7 @@ class _MyAppState extends State<MyApp> {
         home: Scaffold(
             body: FirebaseAuth.instance.currentUser == null ||
                     FirebaseAuth.instance.currentUser.isNullOrBlank == true
-                ? MyPhone()
+                ? Signup()
                 : MainPage()));
   }
 }
