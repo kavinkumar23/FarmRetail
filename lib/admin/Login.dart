@@ -7,7 +7,6 @@ import 'package:login_system/admin/Signup.dart';
 import 'package:login_system/configurations/BigText.dart';
 import 'package:login_system/widgets/Loading.dart';
 import 'package:login_system/configurations/AppColors.dart';
-import 'package:login_system/models/UserClass.dart';
 import 'package:login_system/widgets/PlaneTextField.dart';
 import 'package:login_system/widgets/PrimayButton.dart';
 import '../../../configurations/Dimensions.dart';
@@ -15,7 +14,6 @@ import '../../../configurations/SmallText.dart';
 import '../controllers/auth_controller.dart';
 
 class Login extends StatefulWidget {
-  bool isLoading = false;
   Login({super.key});
 
   @override
@@ -26,6 +24,7 @@ class _LoginState extends State<Login> {
   TextEditingController _emailController = TextEditingController();
   TextEditingController _passwordController = TextEditingController();
   final AuthController authController = Get.put(AuthController());
+  bool isLoading = false;
 
   String thisiserror = "";
   String LoadingMessage = "Logging in";
@@ -37,10 +36,10 @@ class _LoginState extends State<Login> {
 
   @override
   Widget build(BuildContext context) {
-    UserClass Ue;
+    // UserClass Ue;
     return Scaffold(
       backgroundColor: AppColors.darkBackgroundColor,
-      body: widget.isLoading == true
+      body: isLoading == true
           ? Loading(
               message: LoadingMessage,
             )
@@ -123,13 +122,13 @@ class _LoginState extends State<Login> {
                           icon: Icons.login,
                           tapAction: () async {
                             setState(() {
-                              widget.isLoading = true;
+                              isLoading = true;
                             });
                             if (_emailController.text.isEmpty ||
                                 _passwordController.text.isEmpty) {
                               setState(() {
                                 thisiserror = "One or more fields are empty";
-                                widget.isLoading = false;
+                                isLoading = false;
                               });
                             } else {
                               bool shouldLogin = await authController.signIn(
@@ -149,7 +148,7 @@ class _LoginState extends State<Login> {
                                         builder: ((context) => MainPage())));
                               } else {
                                 setState(() {
-                                  widget.isLoading = false;
+                                  isLoading = false;
                                   thisiserror = authController.message
                                       .toString()
                                       .replaceRange(

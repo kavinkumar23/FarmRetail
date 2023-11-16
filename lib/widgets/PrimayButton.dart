@@ -12,7 +12,7 @@ class PrimaryButton extends StatelessWidget {
   final IconData? icon;
   final double ButtonRadius;
   final double marginValue;
-  double padding;
+  final double padding;
 
   PrimaryButton(
       {super.key,

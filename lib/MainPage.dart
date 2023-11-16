@@ -8,6 +8,7 @@ import 'package:login_system/pages/UsersPage.dart';
 import 'package:login_system/pages/add_product_page.dart';
 import 'admin/Login.dart';
 import 'controllers/auth_controller.dart';
+import 'pages/home_screen.dart';
 
 class MainPage extends StatefulWidget {
   const MainPage({super.key});
@@ -18,7 +19,7 @@ class MainPage extends StatefulWidget {
 
 class _MainPageState extends State<MainPage>
     with AutomaticKeepAliveClientMixin<MainPage> {
-  final AuthController authController=Get.put(AuthController());
+  final AuthController authController = Get.put(AuthController());
 
   int selectedIndex = 0;
   @override
@@ -77,7 +78,7 @@ class _MainPageState extends State<MainPage>
           actions: [
             IconButton(
                 onPressed: () async {
-                  await authController. logOut();
+                  await authController.logOut();
                   Navigator.pushReplacement(context,
                       MaterialPageRoute(builder: ((context) => Login())));
                 },
@@ -87,7 +88,7 @@ class _MainPageState extends State<MainPage>
         body: IndexedStack(
           index: selectedIndex,
           children: [
-            ItemsPage(),
+            HomeScreen(),
             UsersPage(),
             AddProductPage(),
             ItemsPage(),
@@ -103,7 +104,7 @@ class _MainPageState extends State<MainPage>
             selectedIndex = index;
             setState(() {});
           },
-          type: BottomNavigationBarType.fixed,
+          type: BottomNavigationBarType.shifting,
           selectedLabelStyle: GoogleFonts.exo(
               fontSize: 10, fontWeight: FontWeight.w400, color: Colors.black),
           unselectedLabelStyle: GoogleFonts.exo(

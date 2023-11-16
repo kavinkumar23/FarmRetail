@@ -162,7 +162,6 @@ class _MyPhoneState extends State<MyPhone> {
                         },
                         codeAutoRetrievalTimeout: (String verificationId) {},
                       );
-                      Get.to(() => const MyVerify());
                     } catch (e) {
                       Get.snackbar('Enter phone number', '');
                     }

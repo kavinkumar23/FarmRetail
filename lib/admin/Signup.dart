@@ -1,8 +1,6 @@
 // ignore_for_file: avoid_print, file_names, prefer_final_fields
 
 import 'dart:io';
-import 'dart:ffi';
-
 import 'package:flutter/material.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:get/get.dart';
@@ -13,7 +11,6 @@ import 'package:login_system/configurations/BigText.dart';
 import 'package:login_system/configurations/Dimensions.dart';
 import 'package:login_system/configurations/SmallText.dart';
 import 'package:login_system/controllers/user_controller.dart';
-import 'package:login_system/models/UserClass.dart';
 import 'package:login_system/widgets/Loading.dart';
 import 'package:login_system/widgets/PlaneTextField.dart';
 import 'package:login_system/widgets/PrimayButton.dart';
@@ -23,7 +20,6 @@ import 'package:quickalert/widgets/quickalert_dialog.dart';
 import '../controllers/auth_controller.dart';
 
 class Signup extends StatefulWidget {
-  bool isLoading = false;
   Signup({super.key});
 
   @override
@@ -33,6 +29,8 @@ class Signup extends StatefulWidget {
 String _CurrentAddress = "N/A";
 
 class _SignupState extends State<Signup> {
+  bool isLoading = false;
+
   String imageaddress = "";
   String imagetoUpload = "";
 
@@ -63,7 +61,7 @@ class _SignupState extends State<Signup> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: AppColors.darkBackgroundColor,
-      body: widget.isLoading == true
+      body: isLoading == true
           ? Loading(
               message: LoadingMessage,
             )
@@ -315,7 +313,7 @@ class _SignupState extends State<Signup> {
                       InkWell(
                         onTap: () async {
                           setState(() {
-                            widget.isLoading = true;
+                            isLoading = true;
                             LoadingMessage = "Fetching your current Location";
                           });
 
@@ -330,7 +328,7 @@ class _SignupState extends State<Signup> {
                           });
 
                           setState(() {
-                            widget.isLoading = false;
+                            isLoading = false;
                           });
 
                           print("Current Location");
@@ -358,7 +356,7 @@ class _SignupState extends State<Signup> {
                           icon: Icons.account_circle,
                           tapAction: () async {
                             setState(() {
-                              widget.isLoading = true;
+                              isLoading = true;
                             });
                             if (_nameController.text == "" ||
                                 _phoneController.text == "" ||
@@ -367,32 +365,32 @@ class _SignupState extends State<Signup> {
                                 _addressController.text == "") {
                               if (_nameController.text == "") {
                                 setState(() {
-                                  widget.isLoading = false;
+                                  isLoading = false;
                                   _nameEmpty = true;
                                 });
                               }
                               if (_emailController.text == "") {
                                 setState(() {
-                                  widget.isLoading = false;
+                                  isLoading = false;
                                   _emailEmpty = true;
                                 });
                               }
                               if (_passwordController.text == "") {
                                 setState(() {
-                                  widget.isLoading = false;
+                                  isLoading = false;
                                   _passwordEmpty = true;
                                 });
                               }
                               if (_addressController.text == "") {
                                 setState(() {
-                                  widget.isLoading = false;
+                                  isLoading = false;
                                   _addressEmpty = true;
                                 });
                               }
 
                               if (_phoneController.text == "") {
                                 setState(() {
-                                  widget.isLoading = false;
+                                  isLoading = false;
                                   _phoneEmpty = true;
                                 });
                               }
@@ -450,7 +448,7 @@ class _SignupState extends State<Signup> {
                                     "${_emailController.text} Registered Successfully");
 
                                 setState(() {
-                                  widget.isLoading = false;
+                                  isLoading = false;
                                 });
 
                                 // ignore: use_build_context_synchronously
@@ -469,7 +467,7 @@ class _SignupState extends State<Signup> {
                                     backgroundColor: Colors.white);
                               } else {
                                 setState(() {
-                                  widget.isLoading = false;
+                                  isLoading = false;
                                 });
 
                                 print("this is first > " + thisiserror);
@@ -499,10 +497,7 @@ class _SignupState extends State<Signup> {
                           SmallText(text: "Already have an account ? "),
                           InkWell(
                               onTap: () {
-                                Navigator.pushReplacement(
-                                    context,
-                                    MaterialPageRoute(
-                                        builder: (context) => Login()));
+                                Get.to(() => Login());
                               },
                               child: SmallText(
                                 text: "Login",
