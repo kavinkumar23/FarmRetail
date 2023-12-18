@@ -44,7 +44,7 @@ class _ItemsPageState extends State<ItemsPage> {
                   margin: const EdgeInsets.symmetric(vertical: 3.0),
                   constraints: BoxConstraints(minHeight: 100, maxHeight:  Get.height*.72),
                   child: StreamBuilder(
-                      stream: ItemHelper().itemsofUser(),
+                      stream: itemsController.itemsofUser(),
                       builder:
                           (context, AsyncSnapshot<QuerySnapshot> snapshot) {
                         if (snapshot.hasData) {

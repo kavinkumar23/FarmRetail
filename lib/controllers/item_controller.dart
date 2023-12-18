@@ -1,8 +1,12 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:get/get.dart';
 import 'package:login_system/helpers/item_helpers.dart';
+
 class ItemsController extends GetxController {
   ItemHelper itemHelper = ItemHelper();
-  RxBool isLoading = false.obs; 
+  RxBool isLoading = false.obs;
+
   ///
   ///
   ///
@@ -25,5 +29,14 @@ class ItemsController extends GetxController {
     isLoading.value = false;
   }
 
-  
+  Stream<QuerySnapshot<Map<String, dynamic>>> itemsofUser() {
+    return FirebaseFirestore.instance
+        .collection('user')
+        .doc(FirebaseAuth.instance.currentUser?.uid)
+        .collection("items")
+        // .orderBy("Id", descending: false)
+        .snapshots();
+  }
+
+ 
 }
