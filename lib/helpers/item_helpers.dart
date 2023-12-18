@@ -58,32 +58,26 @@ class ItemHelper {
     // await desertRef.delete();
   }
 
-  Stream<QuerySnapshot<Map<String, dynamic>>> itemsofUser() {
-    return FirebaseFirestore.instance
-        .collection('user')
-        .doc(FirebaseAuth.instance.currentUser?.uid)
-        .collection("items")
-        // .orderBy("Id", descending: false)
-        .snapshots();
-  }
-
+  
   ///Edit Product
 
-  Future editProduct(String PId, String thisisimage, String Ptitle,
-      String PDescription, String PCategory, double PPrice) async {
+  Future editProduct(String Id, String description, String title,
+      String category, String quantity, double image,String address) async {
     await FirebaseFirestore.instance
         .collection('user')
         .doc(FirebaseAuth.instance.currentUser!.uid)
         .collection("bussiness")
         .doc("B_${FirebaseAuth.instance.currentUser!.uid}")
         .collection("products")
-        .doc(PId)
+        .doc(Id)
         .update({
-      'Category': PCategory,
-      'Price': PPrice,
-      'description': PDescription,
-      'image': thisisimage,
-      'title': Ptitle
+      'Id': Id,
+        'description': description,
+        'title': title,
+        'category': category,
+        'quantity': quantity,
+        'image': image,
+        'address': address,
     });
   }
 
