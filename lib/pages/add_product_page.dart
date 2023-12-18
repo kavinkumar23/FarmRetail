@@ -1,5 +1,6 @@
 import 'dart:io';
 import 'package:file_picker/file_picker.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
@@ -32,9 +33,10 @@ class _AddProductPageState extends State<AddProductPage> {
   String thisiserror = "";
   String LoadingMessage = "Registring User";
   TextEditingController titleController = TextEditingController();
-  TextEditingController descController = TextEditingController();
+  // TextEditingController descController = TextEditingController();
   TextEditingController categoryController = TextEditingController();
   TextEditingController quantitiyController = TextEditingController();
+  TextEditingController priceController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -86,8 +88,8 @@ class _AddProductPageState extends State<AddProductPage> {
                     },
                     child: Container(
                       margin: EdgeInsets.only(left: 11),
-                      height: 166,
-                      width: 322,
+                      height: Get.height * .2,
+                      width: Get.width * .9,
                       decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(7),
                           image: imageaddress != ""
@@ -131,12 +133,18 @@ class _AddProductPageState extends State<AddProductPage> {
                       onChange: () {}),
                   PlaneTextField(
                       isEnabled: isAdding == true ? false : true,
-                      minLines: 2,
-                      maxLines: 3,
-                      placeholder: "Enter item description",
-                      controller: descController,
+                      placeholder: "Enter item price",
+                      controller: priceController,
                       icon: Icons.title,
                       onChange: () {}),
+                  // PlaneTextField(
+                  //     isEnabled: isAdding == true ? false : true,
+                  //     minLines: 2,
+                  //     maxLines: 3,
+                  //     placeholder: "Enter item description",
+                  //     controller: descController,
+                  //     icon: Icons.title,
+                  //     onChange: () {}),
                   PlaneTextField(
                     isEmpty: _addressEmpty == false ? false : true,
                     onChange: (value) => {
@@ -208,9 +216,9 @@ class _AddProductPageState extends State<AddProductPage> {
                   PrimaryButton(
                       tapAction: () async {
                         if (imageaddress == "" ||
-                            descController.text == "" ||
                             quantitiyController.text == "" ||
                             categoryController.text == "" ||
+                            priceController.text == "" ||
                             _addressController.text == "" ||
                             titleController.text == "") {
                           Fluttertoast.showToast(
@@ -220,21 +228,22 @@ class _AddProductPageState extends State<AddProductPage> {
                             isAdding = true;
                           });
 
-                       await   itemsController.addNewItem(
+                          await itemsController.addNewItem(
                               itemtitle: titleController.text.trim(),
-                              ItemDescription: descController.text,
                               itemCategory: categoryController.text,
                               itemQuantity: quantitiyController.text,
                               itemimage: imageaddress,
-                              address: _addressController.text);
+                              address: _addressController.text,
+                              itemprice: priceController.text,
+                              userId: FirebaseAuth.instance.currentUser!.uid);
 
                           setState(() {
                             isAdding = false;
                             imageaddress = "";
                             titleController.text = "";
-                            descController.text = "";
                             categoryController.text = "";
                             quantitiyController.text = "";
+                            priceController.text = "";
                             _addressController.text = "";
                           });
 

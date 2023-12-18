@@ -64,7 +64,7 @@ class _UsersPageState extends State<UsersPage> {
                                     scrollDirection: Axis.vertical,
                                     children: snapshot.data!.docs.map(
                                       (data) {
-                                        String imageAddress;
+                                        // String imageAddress;
 
                                         if (data["username"]
                                                 .toString()
@@ -82,175 +82,180 @@ class _UsersPageState extends State<UsersPage> {
                                                 .contains(
                                                     searchText.toLowerCase())) {
                                           return GestureDetector(
-                                            child: Container(
-                                              padding:
-                                                  EdgeInsets.only(bottom: 5),
-                                              decoration: const BoxDecoration(
-                                                border: Border(
-                                                  // top: BorderSide(width: 16.0, color: Colors.lightBlue.shade600),
-                                                  bottom: BorderSide(
-                                                      width: 2.0,
-                                                      color: Color.fromARGB(
-                                                          255, 237, 237, 237)),
-                                                ),
-                                              ),
-                                              //  padding: EdgeInsets.all(10),
-                                              child: Column(
-                                                children: [
-                                                  ListTile(
-                                                    onTap: () {
-                                                      if (data["UserId"] ==
-                                                          FirebaseAuth
-                                                              .instance
-                                                              .currentUser
-                                                              ?.uid) {
-                                                        Navigator.pushReplacement(
-                                                            context,
-                                                            MaterialPageRoute(
-                                                                builder: (context) => MainPage(
-                                                                    // pageIndex: 2,
-                                                                    )));
-                                                      } else {
-                                                        showModalBottomSheet(
-                                                            context: context,
-                                                            builder:
-                                                                ((BuildContext
-                                                                        context) =>
-                                                                    Container(
-                                                                      height:
-                                                                          450,
-                                                                      padding:
-                                                                          EdgeInsets.all(
-                                                                              20),
-                                                                      child:
-                                                                          Column(
-                                                                        children: [
-                                                                          CircleAvatar(
-                                                                              radius: 50,
-                                                                              backgroundImage: NetworkImage(data["ProfileImage"])),
-                                                                          SizedBox(
-                                                                            height:
-                                                                                10,
-                                                                          ),
-                                                                          BigText(
-                                                                              text: data["username"]),
-                                                                          SizedBox(
-                                                                            height:
-                                                                                20,
-                                                                          ),
-                                                                          ListTile(
-                                                                            leading:
-                                                                                Icon(Icons.email),
-                                                                            title:
-                                                                                SmallText(text: data["email"]),
-                                                                          ),
-                                                                          ListTile(
-                                                                            leading:
-                                                                                Icon(Icons.pin_drop),
-                                                                            title:
-                                                                                SmallText(text: data["Address"]),
-                                                                          ),
-                                                                          ListTile(
-                                                                            leading:
-                                                                                Icon(Icons.phone),
-                                                                            title:
-                                                                                SmallText(text: data["Phoneno"]),
-                                                                          )
-                                                                        ],
-                                                                      ),
-                                                                    )));
-                                                      }
-                                                    },
-                                                    leading: CircleAvatar(
-                                                        radius: 30,
-                                                        backgroundImage:
-                                                            NetworkImage(data[
-                                                                "ProfileImage"])),
-                                                    title: Row(
-                                                      children: [
-                                                        BigText(
-                                                            text: data[
-                                                                "username"]),
-                                                        SizedBox(
-                                                          width: 10,
-                                                        ),
-                                                        data["UserId"] ==
-                                                                FirebaseAuth
-                                                                    .instance
-                                                                    .currentUser
-                                                                    ?.uid
-                                                            // e["email"] !=
-                                                            //         FirebaseAuth.instance
-                                                            //             .currentUser?.email
-                                                            ? Container(
-                                                                padding:
-                                                                    EdgeInsets
-                                                                        .all(5),
-                                                                decoration:
-                                                                    BoxDecoration(
-                                                                        border: Border
-                                                                            .all(
-                                                                          width:
-                                                                              1,
-                                                                          color:
-                                                                              AppColors.PrimaryColor,
-                                                                        ),
-                                                                        borderRadius:
-                                                                            BorderRadius.circular(5)),
-                                                                child:
-                                                                    SmallText(
-                                                                  text:
-                                                                      "Current User",
-                                                                  color: AppColors
-                                                                      .PrimaryColor,
-                                                                ),
-                                                              )
-                                                            : const SizedBox()
-                                                      ],
-                                                    ),
-                                                    subtitle: Column(
-                                                      crossAxisAlignment:
-                                                          CrossAxisAlignment
-                                                              .start,
-                                                      children: [
-                                                        SizedBox(
-                                                          height: 10,
-                                                        ),
-                                                        // SmallText(text: e["Address"]),
-                                                        Row(
-                                                          children: [
-                                                            Icon(
-                                                              Icons.email,
-                                                              size: 17,
-                                                              color: AppColors
-                                                                  .PrimaryColor,
-                                                            ),
-                                                            SizedBox(
-                                                              width: 10,
-                                                            ),
-                                                            SmallText(
-                                                              iscentre: false,
-                                                              text:
-                                                                  data["email"],
-                                                              color:
-                                                                  Colors.grey,
-                                                            ),
-                                                          ],
-                                                        ),
-
-                                                        SizedBox(
-                                                          height: 10,
-                                                        ),
-
-                                                        SmallText(
-                                                          iscentre: false,
-                                                          text: data["Address"],
-                                                          color: Colors.grey,
-                                                        ),
-                                                      ],
-                                                    ),
+                                            child: Expanded(
+                                              child: Container(
+                                                padding:
+                                                    EdgeInsets.only(bottom: 5),
+                                                decoration: const BoxDecoration(
+                                                  border: Border(
+                                                    // top: BorderSide(width: 16.0, color: Colors.lightBlue.shade600),
+                                                    bottom: BorderSide(
+                                                        width: 2.0,
+                                                        color: Color.fromARGB(
+                                                            255, 237, 237, 237)),
                                                   ),
-                                                ],
+                                                ),
+                                                child: Column(
+                                                  children: [
+                                                    ListTile(
+                                                      onTap: () {
+                                                        if (data["UserId"] ==
+                                                            FirebaseAuth
+                                                                .instance
+                                                                .currentUser
+                                                                ?.uid) {
+                                                          Navigator.pushReplacement(
+                                                              context,
+                                                              MaterialPageRoute(
+                                                                  builder: (context) => MainPage(
+                                                                      // pageIndex: 2,
+                                                                      )));
+                                                        } else {
+                                                          showModalBottomSheet(
+                                                              context: context,
+                                                              builder:
+                                                                  ((BuildContext
+                                                                          context) =>
+                                                                      Container(
+                                                                        height:
+                                                                            450,
+                                                                        padding:
+                                                                            EdgeInsets.all(
+                                                                                20),
+                                                                        child:
+                                                                            Column(
+                                                                          children: [
+                                                                            CircleAvatar(
+                                                                                radius: 50,
+                                                                                backgroundImage: NetworkImage(data["ProfileImage"])),
+                                                                            SizedBox(
+                                                                              height:
+                                                                                  10,
+                                                                            ),
+                                                                            BigText(
+                                                                                text: data["username"]),
+                                                                            SizedBox(
+                                                                              height:
+                                                                                  20,
+                                                                            ),
+                                                                            ListTile(
+                                                                              leading:
+                                                                                  Icon(Icons.email),
+                                                                              title:
+                                                                                  SmallText(text: data["email"]),
+                                                                            ),
+                                                                            ListTile(
+                                                                              leading:
+                                                                                  Icon(Icons.pin_drop),
+                                                                              title:
+                                                                                  SmallText(text: data["Address"]),
+                                                                            ),
+                                                                            ListTile(
+                                                                              leading:
+                                                                                  Icon(Icons.phone),
+                                                                              title:
+                                                                                  SmallText(text: data["Phoneno"]),
+                                                                            )
+                                                                          ],
+                                                                        ),
+                                                                      )));
+                                                        }
+                                                      },
+                                                      leading: CircleAvatar(
+                                                          radius: 30,
+                                                          backgroundImage:
+                                                              NetworkImage(data[
+                                                                  "ProfileImage"])),
+                                                      title: Row(
+                                                        children: [
+                                                          Flexible(
+                                                            child: BigText(
+                                                                text: data[
+                                                                    "username"]),
+                                                          ),
+                                                          SizedBox(
+                                                            width: 10,
+                                                          ),
+                                                          data["UserId"] ==
+                                                                  FirebaseAuth
+                                                                      .instance
+                                                                      .currentUser
+                                                                      ?.uid
+                                                              // e["email"] !=
+                                                              //         FirebaseAuth.instance
+                                                              //             .currentUser?.email
+                                                              ? Container(
+                                                                  padding:
+                                                                      EdgeInsets
+                                                                          .all(5),
+                                                                  decoration:
+                                                                      BoxDecoration(
+                                                                          border: Border
+                                                                              .all(
+                                                                            width:
+                                                                                1,
+                                                                            color:
+                                                                                AppColors.PrimaryColor,
+                                                                          ),
+                                                                          borderRadius:
+                                                                              BorderRadius.circular(5)),
+                                                                  child:
+                                                                      SmallText(
+                                                                    text:
+                                                                        "Current User",
+                                                                    color: AppColors
+                                                                        .PrimaryColor,
+                                                                  ),
+                                                                )
+                                                              : const SizedBox()
+                                                        ],
+                                                      ),
+                                                      subtitle: Column(
+                                                        crossAxisAlignment:
+                                                            CrossAxisAlignment
+                                                                .start,
+                                                        children: [
+                                                          SizedBox(
+                                                            height: 10,
+                                                          ),
+                                                          // SmallText(text: e["Address"]),
+                                                          Row(
+                                                            children: [
+                                                              Icon(
+                                                                Icons.email,
+                                                                size: 17,
+                                                                color: AppColors
+                                                                    .PrimaryColor,
+                                                              ),
+                                                              SizedBox(
+                                                                width: 10,
+                                                              ),
+                                                              Flexible(
+                                                                child: SmallText(
+                                                                  iscentre: false,
+                                                                  text:
+                                                                      data["email"],
+                                                                  color:
+                                                                      Colors.grey,
+                                                                ),
+                                                              ),
+                                                            ],
+                                                          ),
+                                            
+                                                          SizedBox(
+                                                            height: 10,
+                                                          ),
+                                            
+                                                          SmallText(
+                                                            iscentre: false,
+                                                            text: data["Address"],
+                                                            color: Colors.grey,
+                                                          ),
+                                                        ],
+                                                      ),
+                                                    ),
+                                                  ],
+                                                ),
                                               ),
                                             ),
                                           );

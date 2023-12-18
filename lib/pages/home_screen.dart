@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -7,6 +5,7 @@ import '../configurations/BigText.dart';
 import '../configurations/SmallText.dart';
 import '../controllers/item_controller.dart';
 import '../widgets/PlaneTextField.dart';
+import 'product_detail_page.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -55,8 +54,9 @@ class _HomeScreenState extends State<HomeScreen> {
                     ],
                   ),
                 ),
+
                 StreamBuilder(
-                    stream: itemsController.itemsofUser(),
+                    stream: itemsController.itemsofUsers(),
                     builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
                       if (snapshot.hasData) {
                         if (snapshot.data!.docs.isNotEmpty) {
@@ -69,12 +69,10 @@ class _HomeScreenState extends State<HomeScreen> {
                                   shrinkWrap: true,
                                   gridDelegate:
                                       SliverGridDelegateWithFixedCrossAxisCount(
-                                    crossAxisSpacing: 25,
+                                    crossAxisSpacing: 26,
                                     crossAxisCount: 2,
                                   ),
                                   children: snapshot.data!.docs.map((data) {
-                                    log(data.data()
-                                    .toString());
                                     if (data["title"]
                                             .toString()
                                             .toLowerCase()
@@ -104,18 +102,29 @@ class _HomeScreenState extends State<HomeScreen> {
                                         crossAxisAlignment:
                                             CrossAxisAlignment.start,
                                         children: [
-                                          Container(
-                                            // margin: EdgeInsets.all(7.4),
-                                            height: 77,
-                                            width: 77,
-                                            decoration: BoxDecoration(
-                                                borderRadius:
-                                                    BorderRadius.circular(12),
-                                                image: DecorationImage(
-                                                    image: NetworkImage(
-                                                      data['image'],
-                                                    ),
-                                                    fit: BoxFit.cover)),
+                                          InkWell(
+                                            onTap: () {
+                                              Get.to(() => ProductDetailPage(
+                                                  image: data['image'],
+                                                  price: data['price'],
+                                                  quantity: data['quantity'],
+                                                  category: data['category'],
+                                                  address: data['address'],
+                                                  title: data['title']));
+                                            },
+                                            child: Container(
+                                              // margin: EdgeInsets.all(7.4),
+                                              height: 77,
+                                              width: 77,
+                                              decoration: BoxDecoration(
+                                                  borderRadius:
+                                                      BorderRadius.circular(12),
+                                                  image: DecorationImage(
+                                                      image: NetworkImage(
+                                                        data['image'],
+                                                      ),
+                                                      fit: BoxFit.cover)),
+                                            ),
                                           ),
                                           SizedBox(
                                             height: 3,
@@ -172,7 +181,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       BigText(text: 'Nearby'),
-                      Icon(
+                      Icon( 
                         Icons.list,
                         size: 33,
                       )
@@ -182,8 +191,6 @@ class _HomeScreenState extends State<HomeScreen> {
                 SizedBox(
                   height: 5,
                 ),
-
-                
 
                 // StreamBuilder(
                 //     stream: itemsController.itemsofUser(),

@@ -3,10 +3,9 @@ import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:login_system/configurations/AppColors.dart';
 import 'package:login_system/pages/ItemsPage.dart';
-import 'package:login_system/pages/MyAccountPage.dart';
-import 'package:login_system/pages/UsersPage.dart';
+import 'package:login_system/pages/profilePage.dart';
+import 'package:login_system/pages/usersPage.dart';
 import 'package:login_system/pages/add_product_page.dart';
-import 'admin/Login.dart';
 import 'controllers/auth_controller.dart';
 import 'pages/home_screen.dart';
 
@@ -77,10 +76,32 @@ class _MainPageState extends State<MainPage>
           title: Text(getAppBarTitle()),
           actions: [
             IconButton(
-                onPressed: () async {
-                  await authController.logOut();
-                  Navigator.pushReplacement(context,
-                      MaterialPageRoute(builder: ((context) => Login())));
+                onPressed: ()  {
+                  showDialog(
+                      context: context,
+                      builder: (context) => AlertDialog(
+                            title: const Text("Are you sure ?"),
+                            content: const Text(
+                                "Click Confirm if you want to Log out of the app"),
+                            actions: [
+                              TextButton(
+                                  onPressed: () {
+                                    Navigator.pop(context);
+                                  },
+                                  child: const Text("Cancel")),
+                              TextButton(
+                                  onPressed: () {
+                                    authController.logOut();
+                                  
+
+                                    Navigator.pop(context);
+                                  },
+                                  child: const Text(
+                                    "Confirm",
+                                    style: TextStyle(color: Colors.red),
+                                  ))
+                            ],
+                          ));
                 },
                 icon: Icon(Icons.logout))
           ],
@@ -117,11 +138,11 @@ class _MainPageState extends State<MainPage>
                 label: "Home"),
             BottomNavigationBarItem(
                 icon: Icon(
-                  Icons.message,
+                  Icons.watch_later_rounded,
                 ),
-                label: "Messages"),
+                label: "Users"),
             BottomNavigationBarItem(
-                icon: Icon(Icons.add_box_sharp), label: "Sell"),
+                icon: Icon(Icons.add_box_sharp), label: "Add"),
             BottomNavigationBarItem(icon: Icon(Icons.search), label: "Search"),
             BottomNavigationBarItem(
                 icon: Icon(Icons.account_circle), label: "Account")

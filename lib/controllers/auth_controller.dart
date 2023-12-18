@@ -3,6 +3,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:firebase_core/firebase_core.dart' as firebase_core;
 import 'package:get/get.dart';
+import 'package:login_system/admin/Login.dart';
 
 
 class AuthController extends GetxController {
@@ -68,6 +69,7 @@ class AuthController extends GetxController {
 
   logOut() async {
     await FirebaseAuth.instance.signOut();
+    Get.to(()=>Login());
   }
 
 //  Method to reset profile password
