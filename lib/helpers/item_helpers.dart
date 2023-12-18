@@ -12,18 +12,17 @@ class ItemHelper {
   ///
   Future addNewItem({
     required String itemtitle,
-    required String itemDescription,
     required String itemCategory,
     required String itemQuantity,
     required String itemimage,
+    required String itemprice,
+    required String userId,
     required String address,
   }) async {
     //Add Product
 
     final postRequest = await FirebaseFirestore.instance
-        .collection('user')
-        .doc(FirebaseAuth.instance.currentUser!.uid)
-        .collection("items")
+        .collection('items')
         .doc();
 
     // UploadImages
@@ -33,10 +32,9 @@ class ItemHelper {
     final NewItem = Items(
       Id: postRequest.id,
       title: itemtitle,
-      description: itemDescription,
       category: itemCategory,
       quantity: itemQuantity,
-      image: imageUploaded, address: address,
+      image: imageUploaded, address: address, price:itemprice, userId:userId ,
     );
 
     final json = NewItem.toJson();
@@ -61,7 +59,7 @@ class ItemHelper {
   
   ///Edit Product
 
-  Future editProduct(String Id, String description, String title,
+  Future editProduct(String Id, String description, String title,String price,String userId,
       String category, String quantity, double image,String address) async {
     await FirebaseFirestore.instance
         .collection('user')
@@ -77,6 +75,8 @@ class ItemHelper {
         'category': category,
         'quantity': quantity,
         'image': image,
+        'price': price,
+        'userId': userId,
         'address': address,
     });
   }
