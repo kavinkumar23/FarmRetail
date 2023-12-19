@@ -1,5 +1,4 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:login_system/configurations/BigText.dart';
@@ -31,201 +30,209 @@ class _ItemsPageState extends State<ItemsPage> {
           ? const Center(
               child: CircularProgressIndicator(),
             )
-          : SingleChildScrollView(
-              child: Column(children: [
-                PlaneTextField(
-                    placeholder: "Search Items",
-                    controller: itemSearchController,
-                    icon: Icons.search,
-                    onChange: (value) {
-                      setState(() {
-                        searchText = value;
-                      });
-                    }),
-                RefreshIndicator(
-                  onRefresh: () async {
-                    await itemsController
-                        .itemsofUser(FirebaseAuth.instance.currentUser!.uid);
-                  },
-                  child: Container(
+          : RefreshIndicator(
+              onRefresh: () async {
+                await itemsController.itemsofUsers();
+              },
+              child: SingleChildScrollView(
+                child: Column(children: [
+                  PlaneTextField(
+                      placeholder: "Search Items",
+                      controller: itemSearchController,
+                      suffixIcon: (itemSearchController.text.isEmpty)
+                          ? Icon(Icons.search)
+                          : IconButton(
+                              icon: Icon(Icons.clear),
+                              onPressed: () {
+                                itemSearchController.clear();
+                                setState(() {});
+                              },
+                            ),
+                      onChange: (value) {
+                        setState(() {
+                          searchText = value;
+                        });
+                      }),
+                  Container(
                     margin: const EdgeInsets.symmetric(vertical: 3.0),
-                    constraints: BoxConstraints(
-                        minHeight: 100, maxHeight: Get.height * .72),
+                    // constraints: BoxConstraints(
+                    //     minHeight: 100, maxHeight: Get.height * .72),
                     child: StreamBuilder(
-                        stream: itemsController.itemsofUser(
-                            FirebaseAuth.instance.currentUser!.uid),
+                        stream: itemsController.itemsofUsers(),
                         builder:
                             (context, AsyncSnapshot<QuerySnapshot> snapshot) {
                           if (snapshot.hasData) {
                             if (snapshot.data!.docs.isNotEmpty) {
-                              return ListView(
-                                  padding: EdgeInsets.zero,
-                                  // scrollDirection: Axis.vertical,
-                                  children: snapshot.data!.docs.map((e) {
-                                    if (e["title"]
-                                            .toString()
-                                            .toLowerCase()
-                                            .contains(
-                                                searchText.toLowerCase()) ||
-                                        e["category"]
-                                            .toString()
-                                            .toLowerCase()
-                                            .contains(
-                                                searchText.toLowerCase()) ||
-                                        e["quantity"]
-                                            .toString()
-                                            .toLowerCase()
-                                            .contains(
-                                                searchText.toLowerCase()) ||
-                                        e["address"]
-                                            .toString()
-                                            .toLowerCase()
-                                            .contains(
-                                                searchText.toLowerCase()) ||
-                                        e["description"]
-                                            .toString()
-                                            .toLowerCase()
-                                            .contains(
-                                                searchText.toLowerCase())) {
-                                      return InkWell(
-                                        onTap: () {
-                                          Get.to(() => ProductDetailPage(
-                                              image: e['image'],
-                                              price: e['price'],
-                                              quantity: e['quantity'],
-                                              category: e['category'],
-                                              address: e['address'],
-                                              title: e['title']));
-                                        },
-                                        child: Container(
-                                          margin: EdgeInsets.all(10),
-                                          decoration: BoxDecoration(
-                                              color: Color.fromARGB(
-                                                  255, 224, 224, 224),
-                                              borderRadius:
-                                                  BorderRadius.circular(5)),
-                                          child: Expanded(
-                                            child: Padding(
-                                              padding:
-                                                  const EdgeInsets.all(13.0),
-                                              child: Column(
-                                                crossAxisAlignment:
-                                                    CrossAxisAlignment.start,
-                                                children: [
-                                                  Row(
-                                                    mainAxisAlignment:
-                                                        MainAxisAlignment
-                                                            .spaceBetween,
-                                                    children: [
-                                                      CircleAvatar(
-                                                          radius: 44,
-                                                          backgroundColor:
-                                                              Colors.white,
-                                                          backgroundImage:
-                                                              NetworkImage(
-                                                                  e["image"])),
-                                                      Column(
-                                                        crossAxisAlignment:
-                                                            CrossAxisAlignment
-                                                                .start,
-                                                        children: [
-                                                          BigText(
-                                                              text: e["title"]),
-                                                          SmallText(
-                                                              text: e[
-                                                                  "category"]),
-                                                        ],
-                                                      ),
-                                                      IconButton(
-                                                          onPressed: () {
-                                                            showDialog(
-                                                                context:
-                                                                    context,
-                                                                builder:
-                                                                    (context) =>
-                                                                        AlertDialog(
-                                                                          title:
-                                                                              BigText(text: "Are you sure ?"),
-                                                                          content:
-                                                                              SmallText(text: "Click Confirm if you want to delete this item"),
-                                                                          actions: [
-                                                                            TextButton(
-                                                                                onPressed: () {
-                                                                                  Navigator.pop(context);
-                                                                                },
-                                                                                child: SmallText(text: "Cancel")),
-                                                                            TextButton(
-                                                                                onPressed: () async {
-                                                                                  await ItemHelper().deleteItem(e["Id"]);
-                                                                                  Get.back();
-                                                                                },
-                                                                                child: SmallText(
-                                                                                  text: "Delete",
-                                                                                  color: Colors.red,
-                                                                                ))
-                                                                          ],
-                                                                        ));
-                                                          },
-                                                          icon: Icon(
-                                                            Icons.delete,
-                                                            size: 30,
-                                                            color: Colors.red,
-                                                          )),
-                                                    ],
-                                                  ),
-                                                  SizedBox(
-                                                    height: 15,
-                                                  ),
-                                                  Padding(
-                                                    padding:
-                                                        const EdgeInsets.only(
-                                                            left: 8),
-                                                    child: Row(
+                              return
+                                  // ListView(
+                                  //     padding: EdgeInsets.zero,
+                                  //     // scrollDirection: Axis.vertical,
+                                  //     shrinkWrap: true,
+                                  //     children: snapshot.data!.docs.map((e) {
+                                  //       if (e["title"]
+                                  //               .toString()
+                                  //               .toLowerCase()
+                                  //               .contains(
+                                  //                   searchText.toLowerCase()) ||
+                                  //           e["category"]
+                                  //               .toString()
+                                  //               .toLowerCase()
+                                  //               .contains(
+                                  //                   searchText.toLowerCase()) ||
+                                  //           e["quantity"]
+                                  //               .toString()
+                                  //               .toLowerCase()
+                                  //               .contains(
+                                  //                   searchText.toLowerCase()) ||
+                                  //           e["address"]
+                                  //               .toString()
+                                  //               .toLowerCase()
+                                  //               .contains(
+                                  //                   searchText.toLowerCase())) {
+                                  // return
+                                  GridView.builder(
+                                shrinkWrap: true,
+                                itemCount: snapshot.data?.docs?.length ?? 0,
+                                physics: BouncingScrollPhysics(),
+                                gridDelegate:
+                                    SliverGridDelegateWithFixedCrossAxisCount(
+                                        crossAxisCount: 2),
+                                itemBuilder: (BuildContext context, int index) {
+                                  final e = snapshot.data!.docs[index];
+                                  if (e["title"]
+                                          .toString()
+                                          .toLowerCase()
+                                          .contains(searchText.toLowerCase()) ||
+                                      e["category"]
+                                          .toString()
+                                          .toLowerCase()
+                                          .contains(searchText.toLowerCase()) ||
+                                      e["quantity"]
+                                          .toString()
+                                          .toLowerCase()
+                                          .contains(searchText.toLowerCase()) ||
+                                      e["address"]
+                                          .toString()
+                                          .toLowerCase()
+                                          .contains(searchText.toLowerCase())) {
+                                    return InkWell(
+                                      onTap: () {
+                                        Get.to(() => ProductDetailPage(
+                                            image: e['image'],
+                                            price: e['price'],
+                                            quantity: e['quantity'],
+                                            category: e['category'],
+                                            address: e['address'],
+                                            title: e['title']));
+                                      },
+                                      child: Column(
+                                        children: [
+                                          Container(
+                                            margin: EdgeInsets.all(10),
+                                            decoration: BoxDecoration(
+                                                color: Color.fromARGB(
+                                                    255, 224, 224, 224),
+                                                borderRadius:
+                                                    BorderRadius.circular(5)),
+                                            child: Expanded(
+                                              child: Padding(
+                                                padding:
+                                                    const EdgeInsets.all(10.0),
+                                                child: Column(
+                                                  crossAxisAlignment:
+                                                      CrossAxisAlignment.start,
+                                                  children: [
+                                                    Row(
                                                       mainAxisAlignment:
                                                           MainAxisAlignment
                                                               .spaceBetween,
                                                       children: [
-                                                        Text(
-                                                          e['quantity'],
-                                                        ),
-                                                        SizedBox(
-                                                          width: 44,
-                                                        ),
-                                                        Text(
-                                                          e['price'],
+                                                        CircleAvatar(
+                                                            radius: 25,
+                                                            backgroundColor:
+                                                                Colors.white,
+                                                            backgroundImage:
+                                                                NetworkImage(e[
+                                                                    "image"])),
+                                                        Column(
+                                                          crossAxisAlignment:
+                                                              CrossAxisAlignment
+                                                                  .start,
+                                                          children: [
+                                                            BigText(
+                                                                text:
+                                                                    e["title"]),
+                                                            SmallText(
+                                                                text: e[
+                                                                    "category"]),
+                                                          ],
                                                         ),
                                                       ],
                                                     ),
-                                                  ),
-                                                  SizedBox(
-                                                    height: 15,
-                                                  ),
-                                                  Row(
-                                                    mainAxisAlignment:
-                                                        MainAxisAlignment
-                                                            .spaceBetween,
-                                                    children: [
-                                                      Icon(Icons.pin_drop),
-                                                      SizedBox(
-                                                        width: 15,
-                                                      ),
-                                                      Flexible(
-                                                        child: SmallText(
-                                                          text: e["address"],
-                                                        ),
-                                                      ),
-                                                    ],
-                                                  )
-                                                ],
+                                                    SizedBox(
+                                                      height: 15,
+                                                    ),
+                                                    Padding(
+                                                      padding:
+                                                          const EdgeInsets.only(
+                                                              left: 8),
+                                                      child: Row(
+                                                          mainAxisAlignment:
+                                                              MainAxisAlignment
+                                                                  .spaceBetween,
+                                                          children: [
+                                                            Text(
+                                                              e['price'],
+                                                            ),
+                                                            IconButton(
+                                                                onPressed: () {
+                                                                  showDialog(
+                                                                      context:
+                                                                          context,
+                                                                      builder:
+                                                                          (context) =>
+                                                                              AlertDialog(
+                                                                                title: BigText(text: "Are you sure ?"),
+                                                                                content: SmallText(text: "Click Confirm if you want to delete this item"),
+                                                                                actions: [
+                                                                                  TextButton(
+                                                                                      onPressed: () {
+                                                                                        Navigator.pop(context);
+                                                                                      },
+                                                                                      child: SmallText(text: "Cancel")),
+                                                                                  TextButton(
+                                                                                      onPressed: () async {
+                                                                                        await ItemHelper().deleteItem(e["Id"]);
+                                                                                        Navigator.pop(context);
+                                                                                      },
+                                                                                      child: SmallText(
+                                                                                        text: "Delete",
+                                                                                        color: Colors.red,
+                                                                                      ))
+                                                                                ],
+                                                                              ));
+                                                                },
+                                                                icon: Icon(
+                                                                  Icons.delete,
+                                                                  size: 30,
+                                                                  color: Colors
+                                                                      .red,
+                                                                )),
+                                                          ]),
+                                                    ),
+                                                  ],
+                                                ),
                                               ),
                                             ),
                                           ),
-                                        ),
-                                      );
-                                    } else {
-                                      return SizedBox();
-                                    }
-                                  }).toList());
+                                        ],
+                                      ),
+                                    );
+                                  } else {
+                                    return SizedBox();
+                                  }
+                                },
+                              );
                             } else {
                               return Column(
                                 mainAxisAlignment: MainAxisAlignment.center,
@@ -260,9 +267,9 @@ class _ItemsPageState extends State<ItemsPage> {
                             );
                           }
                         }),
-                  ),
-                )
-              ]),
+                  )
+                ]),
+              ),
             ),
     ));
   }

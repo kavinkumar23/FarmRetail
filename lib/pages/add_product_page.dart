@@ -92,15 +92,11 @@ class _AddProductPageState extends State<AddProductPage> {
                       width: Get.width * .9,
                       decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(7),
-                          image: imageaddress != ""
-                              ? DecorationImage(
-                                  image: FileImage(
-                                    File(imageaddress),
-                                  ),
-                                  fit: BoxFit.cover)
-                              : DecorationImage(
-                                  image: NetworkImage(imageaddress),
-                                  fit: BoxFit.cover),
+                          image: DecorationImage(
+                              image: FileImage(
+                                File(imageaddress),
+                              ),
+                              fit: BoxFit.cover),
                           color: const Color.fromARGB(255, 231, 231, 231)),
                       child: Center(
                           child: imageaddress == ""
@@ -229,13 +225,14 @@ class _AddProductPageState extends State<AddProductPage> {
                           });
 
                           await itemsController.addNewItem(
-                              itemtitle: titleController.text.trim(),
-                              itemCategory: categoryController.text,
-                              itemQuantity: quantitiyController.text,
-                              itemimage: imageaddress,
-                              address: _addressController.text,
-                              itemprice: priceController.text,
-                              userId: FirebaseAuth.instance.currentUser!.uid);
+                            itemtitle: titleController.text.trim(),
+                            itemCategory: categoryController.text,
+                            itemQuantity: quantitiyController.text,
+                            itemimage: imageaddress,
+                            address: _addressController.text,
+                            itemprice: priceController.text,
+                            userId: FirebaseAuth.instance.currentUser!.uid,
+                          );
 
                           setState(() {
                             isAdding = false;

@@ -24,7 +24,7 @@ class ItemsController extends GetxController {
         itemCategory: itemCategory,
         itemQuantity: itemQuantity,
         itemimage: itemimage,
-        address: address, itemprice: itemprice, userId:userId );
+        address: address, itemprice: itemprice, userId:userId,  );
     isLoading.value = false;
   }
 

@@ -106,7 +106,8 @@ class _MainPageState extends State<MainPage>
                 icon: Icon(Icons.logout))
           ],
         ),
-        body: IndexedStack(
+        body:   
+        IndexedStack(
           index: selectedIndex,
           children: [
             HomeScreen(),

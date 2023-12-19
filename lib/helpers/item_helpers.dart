@@ -21,9 +21,8 @@ class ItemHelper {
   }) async {
     //Add Product
 
-    final postRequest = await FirebaseFirestore.instance
-        .collection('items')
-        .doc();
+    final postRequest =
+        await FirebaseFirestore.instance.collection('items').doc();
 
     // UploadImages
     String imageUploaded = await uploadProductImage(postRequest.id, itemimage);
@@ -34,7 +33,10 @@ class ItemHelper {
       title: itemtitle,
       category: itemCategory,
       quantity: itemQuantity,
-      image: imageUploaded, address: address, price:itemprice, userId:userId ,
+      image: imageUploaded,
+      address: address,
+      price: itemprice,
+      userId: userId,
     );
 
     final json = NewItem.toJson();
@@ -43,8 +45,8 @@ class ItemHelper {
 
   Future deleteItem(String ItemId) async {
     await FirebaseFirestore.instance
-        .collection('user')
-        .doc(FirebaseAuth.instance.currentUser!.uid)
+        // .collection('user')
+        // .doc(FirebaseAuth.instance.currentUser!.uid)
         .collection("items")
         .doc(ItemId)
         .delete()
@@ -56,11 +58,18 @@ class ItemHelper {
     // await desertRef.delete();
   }
 
-  
   ///Edit Product
 
-  Future editProduct(String Id, String description, String title,String price,String userId,
-      String category, String quantity, double image,String address) async {
+  Future editProduct(
+      String Id,
+      String description,
+      String title,
+      String price,
+      String userId,
+      String category,
+      String quantity,
+      double image,
+      String address) async {
     await FirebaseFirestore.instance
         .collection('user')
         .doc(FirebaseAuth.instance.currentUser!.uid)
@@ -70,14 +79,14 @@ class ItemHelper {
         .doc(Id)
         .update({
       'Id': Id,
-        'description': description,
-        'title': title,
-        'category': category,
-        'quantity': quantity,
-        'image': image,
-        'price': price,
-        'userId': userId,
-        'address': address,
+      'description': description,
+      'title': title,
+      'category': category,
+      'quantity': quantity,
+      'image': image,
+      'price': price,
+      'userId': userId,
+      'address': address,
     });
   }
 
