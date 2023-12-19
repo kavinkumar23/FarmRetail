@@ -1,9 +1,7 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:login_system/MainPage.dart';
-import 'admin/Signup.dart';
+import 'package:login_system/configurations/auth_gate.dart';
 
 Future main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -35,12 +33,6 @@ class _MyAppState extends State<MyApp> {
 
   @override
   Widget build(BuildContext context) {
-    return GetMaterialApp(
-        debugShowCheckedModeBanner: false,
-        home: Scaffold(
-            body: FirebaseAuth.instance.currentUser == null ||
-                    FirebaseAuth.instance.currentUser.isNullOrBlank == true
-                ? Signup()
-                : MainPage()));
+    return GetMaterialApp(debugShowCheckedModeBanner: false, home: AuthGate());
   }
 }

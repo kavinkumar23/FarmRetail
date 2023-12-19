@@ -7,6 +7,7 @@ import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:login_system/configurations/BigText.dart';
 import 'package:login_system/configurations/SmallText.dart';
+import 'package:login_system/pages/search_page.dart';
 import '../controllers/auth_controller.dart';
 import '../controllers/user_controller.dart';
 import '../widgets/settingtile_widget.dart';
@@ -42,6 +43,7 @@ class _MyAccountPageState extends State<MyAccountPage> {
                     return ListView(
                         padding: EdgeInsets.zero,
                         scrollDirection: Axis.vertical,
+                        shrinkWrap: true,
                         children: snapshot.data!.docs.map(
                           (e) {
                             return Column(
@@ -78,16 +80,12 @@ class _MyAccountPageState extends State<MyAccountPage> {
                                                         : Image.network(
                                                             e['ProfileImage'],
                                                             fit: BoxFit.cover)
-                                                    : Stack(
-                                                      children: [
-                                                        Image.file(
-                                                            File(userController
-                                                                    .image!.path)
-                                                                .absolute,
-                                                            fit: BoxFit.cover,
-                                                          ),
-                                                      ],
-                                                    ),
+                                                    : Image.file(
+                                                        File(userController
+                                                                .image!.path)
+                                                            .absolute,
+                                                        fit: BoxFit.cover,
+                                                      ),
                                               ),
                                             ),
                                             CircleAvatar(
@@ -113,7 +111,32 @@ class _MyAccountPageState extends State<MyAccountPage> {
                                         ),
                                         SmallText(text: e["email"]),
                                         const SizedBox(
-                                          height: 10,
+                                          height: 22,
+                                        ),
+                                        InkWell(
+                                          onTap: () {
+                                            Get.to(() => SearchPage());
+                                          },
+                                          child: Container(
+                                            height: 39,
+                                            width: Get.width * .4,
+                                            decoration: BoxDecoration(
+                                                borderRadius:
+                                                    BorderRadius.circular(6),
+                                                color: Colors.black),
+                                            child: Center(
+                                              child: Text(
+                                                'My Posts',
+                                                style: TextStyle(
+                                                    color: Colors.white,
+                                                    fontWeight:
+                                                        FontWeight.w400),
+                                              ),
+                                            ),
+                                          ),
+                                        ),
+                                        const SizedBox(
+                                          height: 22,
                                         ),
                                         Container(
                                           height: Get.height * .055,
@@ -146,7 +169,8 @@ class _MyAccountPageState extends State<MyAccountPage> {
                                               activeColor: Colors.blue,
                                               value: darkMode,
                                               onChanged: (bool value) async {
-                                                await box.write('darkMode', value);
+                                                await box.write(
+                                                    'darkMode', value);
                                                 Get.changeThemeMode(value
                                                     ? ThemeMode.dark
                                                     : ThemeMode.light);
@@ -161,7 +185,9 @@ class _MyAccountPageState extends State<MyAccountPage> {
                                           trailingWidget: IconButton(
                                               onPressed: () {
                                                 userController.changeName(
-                                                    context, e["username"],e["email"]);
+                                                    context,
+                                                    e["username"],
+                                                    e["email"]);
                                               },
                                               icon: Icon(Icons
                                                   .arrow_forward_ios_outlined)),

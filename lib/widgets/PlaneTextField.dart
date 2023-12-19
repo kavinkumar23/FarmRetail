@@ -10,7 +10,8 @@ class PlaneTextField extends StatelessWidget {
   int minLines;
   int maxLines;
   final String placeholder;
-  final IconData icon;
+  final Widget? suffixIcon;
+  final IconData? icon;
   final Function onChange;
   TextEditingController controller = TextEditingController();
   PlaneTextField({
@@ -22,8 +23,8 @@ class PlaneTextField extends StatelessWidget {
     this.maxLines = 1,
     required this.placeholder,
     required this.controller,
-    required this.icon,
-    required this.onChange,
+     this.icon,
+    required this.onChange, this.suffixIcon,
   });
   @override
   Widget build(BuildContext context) {
@@ -45,7 +46,7 @@ class PlaneTextField extends StatelessWidget {
           ),
           hintText: placeholder,
           contentPadding: const EdgeInsets.all(15),
-          filled: true,
+          filled: true,suffixIcon: suffixIcon,
 
           //   isEmpty == true ? Colors.red :
           hoverColor: AppColors.PrimaryColor,
