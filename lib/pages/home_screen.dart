@@ -58,130 +58,130 @@ class _HomeScreenState extends State<HomeScreen> {
                           searchText = value;
                         });
                       }),
-                  Padding(
-                    padding: const EdgeInsets.all(11.0),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        BigText(text: 'Category'),
-                        Icon(
-                          Icons.list,
-                          size: 33,
-                        )
-                      ],
-                    ),
-                  ),
+                  // Padding(
+                  //   padding: const EdgeInsets.all(11.0),
+                  //   child: Row(
+                  //     mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  //     children: [
+                  //       BigText(text: 'Category'),
+                  //       Icon(
+                  //         Icons.list,
+                  //         size: 33,
+                  //       )
+                  //     ],
+                  //   ),
+                  // ),
           
-                  StreamBuilder(
-                      stream: itemsController.itemsofUsers(),
-                      builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
-                        if (snapshot.hasData) {
-                          if (snapshot.data!.docs.isNotEmpty) {
-                            return Container(
-                              padding: EdgeInsets.symmetric(horizontal: 14),
-                              height: 229,
-                              child: GridView(
-                                  scrollDirection: Axis.horizontal,
-                                  shrinkWrap: true,
-                                  gridDelegate:
-                                      SliverGridDelegateWithFixedCrossAxisCount(
-                                    crossAxisSpacing: 33,
-                                    crossAxisCount: 2,
-                                  ),
-                                  children: snapshot.data!.docs.map((data) {
-                                    if (data["title"]
-                                            .toString()
-                                            .toLowerCase()
-                                            .contains(
-                                                searchText.toLowerCase()) ||
-                                        data["category"]
-                                            .toString()
-                                            .toLowerCase()
-                                            .contains(
-                                                searchText.toLowerCase()) ||
-                                        data["quantity"]
-                                            .toString()
-                                            .toLowerCase()
-                                            .contains(
-                                                searchText.toLowerCase()) ||
-                                        data["address"]
-                                            .toString()
-                                            .toLowerCase()
-                                            .contains(
-                                                searchText.toLowerCase())) {
-                                      return Column(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
-                                        children: [
-                                          InkWell(
-                                            onTap: () {
-                                              Get.to(() => ProductDetailPage(
-                                                  image: data['image'],
-                                                  price: data['price'],
-                                                  quantity: data['quantity'],
-                                                  category: data['category'],
-                                                  address: data['address'],
-                                                  title: data['title']));
-                                            },
-                                            child: Container(
-                                              // margin: EdgeInsets.all(7.4),
-                                              height: Get.height*.09,
-                                              width: Get.width*.23,
-                                              decoration: BoxDecoration(
-                                                  borderRadius:
-                                                      BorderRadius.circular(12),
-                                                  image: DecorationImage(
-                                                      image: NetworkImage(
-                                                        data['image'],
-                                                      ),
-                                                      fit: BoxFit.cover)),
-                                            ),
-                                          ),
-                                          SizedBox(
-                                            height: 3,
-                                          ),
-                                          Text(data['category']),
-                                        ],
-                                      );
-                                    } else {
-                                      return SizedBox();
-                                    }
-                                  }).toList()),
-                            );
-                          } else {
-                            return Column(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              crossAxisAlignment: CrossAxisAlignment.center,
-                              children: [
-                                BigText(
-                                  text: "No Item added yet",
-                                  isCentre: true,
-                                ),
-                                const SizedBox(
-                                  height: 5,
-                                ),
-                                SmallText(
-                                    text:
-                                        "There is no item for this user in database")
-                              ],
-                            );
-                          }
-                        } else {
-                          return Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            children: [
-                              BigText(text: "No Item added yet"),
-                              SizedBox(
-                                height: 5,
-                              ),
-                              SmallText(
-                                  text:
-                                      "There is no item for this user in database")
-                            ],
-                          );
-                        }
-                      }),
+                  // StreamBuilder(
+                  //     stream: itemsController.itemsofUsers(),
+                  //     builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
+                  //       if (snapshot.hasData) {
+                  //         if (snapshot.data!.docs.isNotEmpty) {
+                  //           return Container(
+                  //             padding: EdgeInsets.symmetric(horizontal: 14),
+                  //             height: 229,
+                  //             child: GridView(
+                  //                 scrollDirection: Axis.horizontal,
+                  //                 shrinkWrap: true,
+                  //                 gridDelegate:
+                  //                     SliverGridDelegateWithFixedCrossAxisCount(
+                  //                   crossAxisSpacing: 33,
+                  //                   crossAxisCount: 2,
+                  //                 ),
+                  //                 children: snapshot.data!.docs.map((data) {
+                  //                   if (data["title"]
+                  //                           .toString()
+                  //                           .toLowerCase()
+                  //                           .contains(
+                  //                               searchText.toLowerCase()) ||
+                  //                       data["category"]
+                  //                           .toString()
+                  //                           .toLowerCase()
+                  //                           .contains(
+                  //                               searchText.toLowerCase()) ||
+                  //                       data["quantity"]
+                  //                           .toString()
+                  //                           .toLowerCase()
+                  //                           .contains(
+                  //                               searchText.toLowerCase()) ||
+                  //                       data["address"]
+                  //                           .toString()
+                  //                           .toLowerCase()
+                  //                           .contains(
+                  //                               searchText.toLowerCase())) {
+                  //                     return Column(
+                  //                       crossAxisAlignment:
+                  //                           CrossAxisAlignment.start,
+                  //                       children: [
+                  //                         InkWell(
+                  //                           onTap: () {
+                  //                             Get.to(() => ProductDetailPage(
+                  //                                 image: data['image'],
+                  //                                 price: data['price'],
+                  //                                 quantity: data['quantity'],
+                  //                                 category: data['category'],
+                  //                                 address: data['address'],
+                  //                                 title: data['title']));
+                  //                           },
+                  //                           child: Container(
+                  //                             // margin: EdgeInsets.all(7.4),
+                  //                             height: Get.height*.09,
+                  //                             width: Get.width*.23,
+                  //                             decoration: BoxDecoration(
+                  //                                 borderRadius:
+                  //                                     BorderRadius.circular(12),
+                  //                                 image: DecorationImage(
+                  //                                     image: NetworkImage(
+                  //                                       data['image'],
+                  //                                     ),
+                  //                                     fit: BoxFit.cover)),
+                  //                           ),
+                  //                         ),
+                  //                         SizedBox(
+                  //                           height: 3,
+                  //                         ),
+                  //                         Text(data['category']),
+                  //                       ],
+                  //                     );
+                  //                   } else {
+                  //                     return SizedBox();
+                  //                   }
+                  //                 }).toList()),
+                  //           );
+                  //         } else {
+                  //           return Column(
+                  //             mainAxisAlignment: MainAxisAlignment.center,
+                  //             crossAxisAlignment: CrossAxisAlignment.center,
+                  //             children: [
+                  //               BigText(
+                  //                 text: "No Item added yet",
+                  //                 isCentre: true,
+                  //               ),
+                  //               const SizedBox(
+                  //                 height: 5,
+                  //               ),
+                  //               SmallText(
+                  //                   text:
+                  //                       "There is no item for this user in database")
+                  //             ],
+                  //           );
+                  //         }
+                  //       } else {
+                  //         return Column(
+                  //           mainAxisAlignment: MainAxisAlignment.center,
+                  //           crossAxisAlignment: CrossAxisAlignment.center,
+                  //           children: [
+                  //             BigText(text: "No Item added yet"),
+                  //             SizedBox(
+                  //               height: 5,
+                  //             ),
+                  //             SmallText(
+                  //                 text:
+                  //                     "There is no item for this user in database")
+                  //           ],
+                  //         );
+                  //       }
+                  //     }),
                   // SizedBox(
                   //   height: 22,
                   // ),
@@ -198,9 +198,9 @@ class _HomeScreenState extends State<HomeScreen> {
                   //     ],
                   //   ),
                   // ),
-                  SizedBox(
-                    height: 14,
-                  ),
+                  // SizedBox(
+                  //   height: 14,
+                  // ),
           
                   // StreamBuilder(
                   //     stream: homeController.getLocation(),
@@ -329,10 +329,10 @@ class _HomeScreenState extends State<HomeScreen> {
                           if (snapshot.data!.docs.isNotEmpty) {
                             return SingleChildScrollView(
                               child: Container(
-                                padding: EdgeInsets.symmetric(horizontal: 14),
-                                height: Get.height * .44,
+                                padding: EdgeInsets.symmetric(vertical: 0),
+                                height: Get.height * .65,
                                 child: GridView(
-                                    scrollDirection: Axis.horizontal,
+                                    scrollDirection: Axis.vertical,
                                     shrinkWrap: true,
                                     gridDelegate:
                                         SliverGridDelegateWithFixedCrossAxisCount(
